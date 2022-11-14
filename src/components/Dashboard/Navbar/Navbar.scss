@@ -1,0 +1,80 @@
+@import '../../../globalVariables';
+
+.dashboard_navbar {
+    .dashboard_navbar__user-container {
+        .dashboard_narvbar__user-container--icon {
+            padding: 24px 20px;
+            font-size: 24px;
+            text-align: left;
+        }
+        .dashboard_narvbar__user-container--username {
+            width: 200px;
+            height: fit-content;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 0 auto;
+            padding: 16px 20px;
+            flex-wrap: wrap;
+            -webkit-box-align: center;
+            background-color: $colorPickedUser;
+            border-radius: 9px;
+            justify-content: space-around;
+            img {
+                height: 40px;
+                width: 40px;
+            }
+            h6 {
+                font-size: 14px;
+                font-weight: 600;
+            }
+        }
+
+    }
+    .dashboard_navbar__menu-container {
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        margin-top: 35px;
+        .dashboard_navbar__menu-container--link {
+            &:hover {
+                background-color: $colorPickedUser;
+            }
+            color: $unselectedColor;
+            text-decoration: none;
+            margin-top: 8px;
+            border-radius: 9px;
+           .menu-container__item {
+                display: flex;
+                flex-direction: row;
+                width: 263px;
+                padding: 8px 0px;
+                margin: 0 auto;
+                border-radius: 9px;
+                font-size: 14px;
+                .menu-container__item--icon {
+                    width: 20%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .menu-container__item--text {
+                    width: 80%;
+                    display: flex;
+                    align-items: center;
+                    margin: 2px 0px;
+                }
+            }
+    
+        }
+    }
+}
+
+.selected-item {
+    background-color: $selectedColor;
+    color: $fontMainColor!important;
+    font-weight: 700;
+    &:hover {
+        background-color: $selectedColor!important;
+    }
+}
