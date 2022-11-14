@@ -1,0 +1,14 @@
+$selectedColor: #e8ebee;
+$backgroundOpaque: #f9fafb;
+$fontMainColor: #212b36;
+$kusqiMainColor: #d1e9fc;
+$mainLigthColor: #ffffff;
+$colorPickedUser: #f2f3f5;
+$unselectedColor: #637381;
+
+:export {
+    selectedColor: $selectedColor;
+    backgroundOpaque: $backgroundOpaque;
+    fontMainColor: $fontMainColor;
+    kusqiMainColor: $kusqiMainColor;
+}

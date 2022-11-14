@@ -1,0 +1,12 @@
+@import '../../globalVariables';
+.dashboard-page-container {
+    display: flex;
+    flex-direction: row;
+
+    .dashboard-page-container__menu-section {
+        width: 280px;
+        height: 100vh;
+        border-right: 2px dashed $selectedColor;
+        overflow-y: auto;
+    }
+}
