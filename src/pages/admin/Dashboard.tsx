@@ -1,4 +1,5 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom';
 import Navbar from '../../components/Dashboard/Navbar/Navbar';
 import Window from '../../components/Dashboard/Window/Window';
 import './Dashboard.scss';
@@ -10,7 +11,8 @@ const DashboardPage = () => {
                 <Navbar />
             </section>
             <section>
-                <Window />
+                {/* <Window /> */}
+                <Outlet />
             </section>    
         </div>
     )

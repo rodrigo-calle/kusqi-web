@@ -6,14 +6,24 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 
 import './Navbar.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+// import { useDispatch } from 'react-redux';
+// import { changeOptionMenuDashboard, fetchCurrentOption } from '../../../features/actions';
+// import { DashboardMenuOptionsType } from '../../../types';
 
 const Navbar = () => {
+    const navigate = useNavigate()
+    // const dispatch = useDispatch();
+    // const changeOption = (option: DashboardMenuOptionsType) => {
+    //     dispatch(changeOptionMenuDashboard(option))
+    // }
+
+    // console.log(dispatch(fetchCurrentOption()))
     return (
         <nav className="dashboard_navbar">
             <div className='dashboard_navbar__user-container'>
                 <div className='dashboard_narvbar__user-container--icon'>ICON CONTAINER</div>
-                <div className='dashboard_narvbar__user-container--username'>
+                <div className='dashboard_narvbar__user-container--username' onClick={() => navigate('home') }>
                     <img src="https://icongr.am/clarity/user.svg?size=128&color=94d1ff" alt='user-icon' />
                     <h6>Nombre de Usuario</h6>
                 </div>
