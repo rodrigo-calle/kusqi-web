@@ -1,5 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
+import MainNav from '../../components/Dashboard/MainNav/MainNav';
 import Navbar from '../../components/Dashboard/Navbar/Navbar';
 import Window from '../../components/Dashboard/Window/Window';
 import './Dashboard.scss';
@@ -10,9 +11,12 @@ const DashboardPage = () => {
             <section className='dashboard-page-container__menu-section'>
                 <Navbar />
             </section>
-            <section>
+            <section className='dashboard-page-container__window-section'>
                 {/* <Window /> */}
-                <Outlet />
+                <MainNav />
+                <div className='dashboard-page-container__window-section--window'>
+                    <Outlet />
+                </div>                
             </section>    
         </div>
     )

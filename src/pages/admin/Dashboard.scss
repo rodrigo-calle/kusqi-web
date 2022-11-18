@@ -9,4 +9,12 @@
         border-right: 2px dashed $selectedColor;
         overflow-y: auto;
     }
+    .dashboard-page-container__window-section {
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 270px);
+        .dashboard-page-container__window-section--window {
+            padding: 50px 30px 10px 30px;
+        }
+    }
 }

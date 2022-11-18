@@ -1,0 +1,52 @@
+@import '../../../../globalVariables';
+
+.home-dashboard {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .home-dashboard__title {
+        font-weight: 600;
+    }
+    .home-dahboard__resume-boxes {
+        width: 100%;
+        margin-top: 40px;
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .resume-boxes__item {
+           width: 205px;
+           height: 238px; 
+           border-radius: 9px; 
+           background-color: $kusqiMainColor;
+           padding: 10px 40px;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           .resume-boxes__item-image {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #b3cfe6;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            svg {
+                height: 25px;
+                width: 25px;
+            }
+           }
+        }
+        .resume-boxes__quantity {
+            font-size: 35px;
+            font-weight: 600;
+            padding: 10px 0px 5px 0px;
+        }
+        .resume-boxes__label {
+            letter-spacing: 0.15em;
+        }
+    }
+}
