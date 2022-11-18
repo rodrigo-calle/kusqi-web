@@ -2,13 +2,24 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import logo from './logo.svg';
 import './App.scss';
+import Clients from './components/Dashboard/Window/Clients/Clients';
+import Home from './components/Dashboard/Window/Home/Home';
+import Promos from './components/Dashboard/Window/Promos/Promos';
+import Services from './components/Dashboard/Window/Services/Services';
+import Tours from './components/Dashboard/Window/Tours/Tours';
 import DashboardPage from './pages/admin/Dashboard';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/dashboard' element={<DashboardPage />} />
+        <Route path='/dashboard/' element={<DashboardPage />} >
+          <Route path='home' element={<Home />} />
+          <Route path='services' element={<Services />} />
+          <Route path='tours' element={<Tours />} />
+          <Route path='clients' element={<Clients />} />
+          <Route path='promos' element={<Promos />} />
+        </Route>
       </Routes>    
     </BrowserRouter>
   
