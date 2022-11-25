@@ -14,16 +14,11 @@ const Navbar = () => {
         navigate(option)
         const optionListIds = ['homeOption', 'servicesOption', 'toursOption', 'clientsOption', 'promosOption'];
         const optionId = `${option}Option`
-        console.log(optionId)
         const d = document;
         const optionSelected = d.querySelector(`#${optionId}`);
-        console.log(optionSelected)
         if(optionSelected) {
             optionListIds.forEach((optionElement) => {
-                console.log('option',optionElement)
-
                 if(optionElement === optionId) {
-                    console.log(optionElement)
                     optionSelected.classList.add('selected-item')
                 } else {
                     const optionNoSelected = d.querySelector(`#${optionElement}`);
