@@ -19,18 +19,21 @@ const ClientForm = () => {
 
   const validationSchema = yup.object({
     name: yup
-      .string().nullable(),
+      .string()
+      .required('Nombre de Cliente es Requerido'),
     lastName: yup
     .string().nullable(),
 
     dni: yup
-    .string().nullable(),
+    .string()
+    .required('DNI de Cliente es Requerido y')
+    .length(8, 'El documento debe ser exactamente de 8 digitos'),
 
     email: yup
     .string().nullable(),
 
     phone: yup
-    .string().nullable(),
+    .string().required('Telefono de Cliente es requerido'),
 
     provenance: yup
     .string().nullable(),

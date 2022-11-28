@@ -1,36 +1,64 @@
-import { DashboardMenuOptionsType } from '../types';
-import { CHANGE_OPTION_MENU_DASHBOARD, LOAD_OPEN_SERVICE_FORM, LOAD_OPTION_MENU_DASHBOARD, UPDATE_OPEN_SERVICE_FORM } from './types';
+import { BusinessCategories, DashboardMenuOptionsType, RegisterType } from '../types';
+import { 
+    REGISTER_USER,
+    LOAD_USER,
+    UPDATE_USER,
+    LOGIN_USER,
+    GET_USER_FROM_LOCAL_STORAGE,
+    LOGOUT_USER
+} from './types';
 
 interface ReducerState {
-    dashboardMenu: DashboardMenuOptionsType;
-    serviceDashboardForm: boolean;
+    // dashboardMenu: DashboardMenuOptionsType;
+    // serviceDashboardForm: boolean;
+    register: RegisterType;
+    user: any | null;
 }
 const initialState: ReducerState = {
-    dashboardMenu: DashboardMenuOptionsType.HOME,
-    serviceDashboardForm: false,
+    // dashboardMenu: DashboardMenuOptionsType.HOME,
+    // serviceDashboardForm: false,
+    register: {
+        category: BusinessCategories.TOURIST_AGENT,
+        name: '',
+        password: '',
+        email: '',
+    },
+    user: null,
 }
 
 function reducer(state = initialState, action: any) {
     switch (action.type) {
-        case LOAD_OPTION_MENU_DASHBOARD:
+        case LOGIN_USER:
+            return {
+              ...state,
+              user: action.payload,
+            };
+      
+          case LOGOUT_USER:
+            return {
+              ...state,
+              user: action.payload,
+            };
+          case GET_USER_FROM_LOCAL_STORAGE: {
+            return {
+              ...state,
+              user: action.payload,
+            };
+          }
+        case REGISTER_USER:
             return {
                 ...state,
-                dashboardMenu: action.payload
+                register: action.payload,
             }
-        case CHANGE_OPTION_MENU_DASHBOARD:
+        case UPDATE_USER:
             return {
                 ...state,
-                dashboardMenu: action.payload,
+                register: action.payload as RegisterType,
             }
-        case LOAD_OPEN_SERVICE_FORM:
+        case LOAD_USER:
             return {
-                ...state,
-                serviceDashboardForm: action.payload,
-            }
-        case UPDATE_OPEN_SERVICE_FORM:
-            return {
-                ...state,
-                serviceDashboardForm: action.payload,
+                    ...state,
+                    register: action.payload,
             }
         default:
             return state;

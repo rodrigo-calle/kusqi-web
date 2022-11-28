@@ -6,6 +6,14 @@ export enum DashboardMenuOptionsType {
     PROMOS = 'promos',
 }
 
+
+export enum BusinessCategories {
+    HOTEL = 'hotel',
+    TOURIST_AGENT = 'agencia turistica',
+    RESTAURANT = 'restaurant',
+    GENERIC = 'generico'
+}
+
 export interface ServiceType {
     // id: string;
     name: string;
@@ -24,6 +32,18 @@ export interface ClientType {
     provenance: string;
     email: string;
     _id?: any;
+}
+
+export interface LoginType {
+    email: string;
+    password: string;
+}
+
+export interface RegisterType {
+    email: string;
+    name: string;
+    password: string;
+    category: BusinessCategories
 }
 // name: string;
 // lastName: string;
