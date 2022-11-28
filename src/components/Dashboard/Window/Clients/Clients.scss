@@ -1,0 +1,21 @@
+.client-dashboard {
+    .client-dashboard__title-container {
+        display: flex;
+        flex-direction: row;
+        width: 95%;
+        justify-content: space-between;
+        .client-dashboard__title-container--title {
+            font-weight: 600;
+        }    
+        .client-dashboard__add-client--btn {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .client-dashboard__table {
+        width: 95%;
+        padding: 40px 0px;
+    }
+}

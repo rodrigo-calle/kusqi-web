@@ -8,11 +8,15 @@ import Promos from './components/Dashboard/Window/Promos/Promos';
 import Services from './components/Dashboard/Window/Services/Services';
 import Tours from './components/Dashboard/Window/Tours/Tours';
 import DashboardPage from './pages/admin/Dashboard';
+import SignIn from './pages/authentication/singIn/SingIn';
+import Register from './pages/authentication/singUp/Index';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/sign-in' element={<SignIn />} />
+        <Route path='/sign-up' element={<Register />} />
         <Route path='/dashboard/' element={<DashboardPage />} >
           <Route path='home' element={<Home />} />
           <Route path='services' element={<Services />} />

@@ -1,0 +1,21 @@
+.service-dashboard {
+    .service-dashboard__title-container {
+        display: flex;
+        flex-direction: row;
+        width: 95%;
+        justify-content: space-between;
+        .service-dashboard__title-container--title {
+            font-weight: 600;
+        }    
+        .service-dashboard__add-service--btn {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .service-dashboard__table {
+        width: 95%;
+        padding: 40px 0px;
+    }
+}
