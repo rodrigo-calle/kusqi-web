@@ -4,15 +4,26 @@ import LineAxisIcon from '@mui/icons-material/LineAxis';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import './Navbar.scss';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { ReducerState } from '../../../features/reducers';
+import { getUserFromLocalStorage } from '../../../features/actions';
 
 const Navbar = () => {
+    const shop = useSelector((state: ReducerState) => state.user)
     const navigate = useNavigate()
+    const dispatch = useDispatch<any>()
+
+    React.useEffect(()=> {
+        dispatch(getUserFromLocalStorage)
+    }, [dispatch])
+
     const handlerMenuNavigation = (option: string): void => {
         navigate(option)
-        const optionListIds = ['homeOption', 'servicesOption', 'toursOption', 'clientsOption', 'promosOption'];
+        const optionListIds = ['homeOption', 'servicesOption', 'toursOption', 'clientsOption', 'promosOption', 'settings'];
         const optionId = `${option}Option`
         const d = document;
         const optionSelected = d.querySelector(`#${optionId}`);
@@ -28,10 +39,16 @@ const Navbar = () => {
         }    
     }
 
-    return (
+    if(!shop){
+        return (
+            <div>Ocurrió un error, comunicarse con el administrador de K</div>
+        )
+    }
+
+    return shop&&(
         <nav className="dashboard_navbar">
             <div className='dashboard_navbar__user-container'>
-                <div className='dashboard_narvbar__user-container--icon'>ICON CONTAINER</div>
+                <div className='dashboard_narvbar__user-container--icon'>{shop.name}</div>
                 <div className='dashboard_narvbar__user-container--username'>
                     <img src="https://icongr.am/clarity/user.svg?size=128&color=94d1ff" alt='user-icon' />
                     <h6>Nombre de Usuario</h6>
@@ -87,6 +104,14 @@ const Navbar = () => {
                             Promociones    
                         </div>
                     </li>
+                    <li id="settingsOption" className='menu-container__item' onClick={() => handlerMenuNavigation('settings') }>
+                        <div className='menu-container__item--icon'>
+                            <SettingsIcon />
+                        </div>
+                        <div className='menu-container__item--text'>
+                            Configuración    
+                        </div>
+                    </li>
                 {/* </Link> */}
         
                 {/* <div className='menu-container__item'></div>
@@ -94,6 +119,8 @@ const Navbar = () => {
             </ul>
         </nav>
     )
+
+
 }
 
 export default Navbar;

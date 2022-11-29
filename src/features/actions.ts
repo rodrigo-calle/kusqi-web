@@ -71,7 +71,7 @@ export const getUserFromLocalStorage = async (dispatch: Dispatch) => {
         const token = localStorage.getItem('token');
         if (token) {
         const decoded = jwt_decode(token);
-        dispatch(getUserFromLocalStorageMethod(decoded));
+            dispatch(getUserFromLocalStorageMethod(decoded));
         }
     } catch (error) {
         console.log(error);

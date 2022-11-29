@@ -1,4 +1,4 @@
-import { BusinessCategories, DashboardMenuOptionsType, RegisterType } from '../types';
+import { BusinessCategories, RegisterType } from '../types';
 import { 
     REGISTER_USER,
     LOAD_USER,
@@ -8,11 +8,19 @@ import {
     LOGOUT_USER
 } from './types';
 
-interface ReducerState {
+export interface ReducerState {
     // dashboardMenu: DashboardMenuOptionsType;
     // serviceDashboardForm: boolean;
     register: RegisterType;
-    user: any | null;
+    user: {
+      id: string;
+      email: string;
+      name: string;
+      ruc: string;
+      avatar: string;
+      iat: string;
+      exp: string;
+    } | null;
 }
 const initialState: ReducerState = {
     // dashboardMenu: DashboardMenuOptionsType.HOME,
