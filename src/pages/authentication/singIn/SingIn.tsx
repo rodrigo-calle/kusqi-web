@@ -15,9 +15,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 // import authServices from '../../../services/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUserFromLocalStorage, logInUser } from '../../../features/actions';
 import { useNavigate } from 'react-router-dom';
+import { ReducerState } from '../../../features/reducers';
 
 function Copyright(props: any) {
   return (
@@ -56,12 +57,15 @@ const SignIn = () => {
     initialValues,
     onSubmit: async (values) => {
       try {
-        dispatch(logInUser({
+        const test = dispatch(logInUser({
           email: values.email,
           password: values.password,
-        }))
+        })).then((value: any) => console.log(value))
+
+        console.log(test)
         dispatch(getUserFromLocalStorage);
-        navigate('/dashboard/home')
+        // const user = await useSelector((state: ReducerState) => state.user)
+        navigate('/dashboard/home/')
       } catch (error) {
         console.log('login error', error)
       }
@@ -150,7 +154,7 @@ const SignIn = () => {
                   </Link> */}
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/sign-up" variant="body2">
                     {'¿No tienes cuenta? Regístrate'}
                   </Link>
                 </Grid>
