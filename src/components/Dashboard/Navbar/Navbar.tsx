@@ -15,11 +15,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ReducerState } from '../../../features/reducers';
 import { getUserFromLocalStorage } from '../../../features/actions';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { AppDispatch } from '../../../features/hooks';
 
 const Navbar = () => {
     const shop = useSelector((state: ReducerState) => state.user)
     const navigate = useNavigate()
-    const dispatch = useDispatch<any>()
+    const dispatch = useDispatch<AppDispatch>()
 
     React.useEffect(()=> {
         dispatch(getUserFromLocalStorage)

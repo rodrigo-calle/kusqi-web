@@ -61,7 +61,6 @@ export const logInUser = (user: LoginType) => async (dispatch: Dispatch) => {
         dispatch(loginUserMethod(decoded));
         return response
       }
-
       return response
     } catch (error) {
       return error
@@ -69,7 +68,7 @@ export const logInUser = (user: LoginType) => async (dispatch: Dispatch) => {
 };
 
 
-export const getUserFromLocalStorage = async (dispatch: Dispatch) => {
+export const getUserFromLocalStorage = async (dispatch: Dispatch): Promise<void> => {
     try {
         const token = localStorage.getItem('token');
         if (token) {

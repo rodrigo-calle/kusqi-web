@@ -23,9 +23,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import touristService from '../../../../services/touristServices';
-import { useNavigate } from 'react-router'
 import { useSelector} from 'react-redux';
 import { ReducerState } from '../../../../features/reducers';
+import { ServiceType } from '../../../../types';
 
 interface Data {
   name: string;
@@ -72,29 +72,29 @@ function createData(
 //     ),
 // ];
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+// function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+//   if (b[orderBy] < a[orderBy]) {
+//     return -1;
+//   }
+//   if (b[orderBy] > a[orderBy]) {
+//     return 1;
+//   }
+//   return 0;
+// }
 
 type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+// function getComparator<Key extends keyof any>(
+//   order: Order,
+//   orderBy: Key,
+// ): (
+//   a: { [key in Key]: number | string },
+//   b: { [key in Key]: number | string },
+// ) => number {
+//   return order === 'desc'
+//     ? (a, b) => descendingComparator(a, b, orderBy)
+//     : (a, b) => -descendingComparator(a, b, orderBy);
+// }
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
@@ -203,7 +203,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  handleDelete: any;
+  handleDelete: () => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -263,14 +263,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 const ServiceTable = () => {
-  const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [guides, setGuides] = React.useState([])
+  const [services, setServices] = React.useState([])
   const user = useSelector((state: ReducerState) => state.user)
 
   const getGuides = async () => {
@@ -278,7 +277,7 @@ const ServiceTable = () => {
     const data = await response.json();
 
     if(response.ok) {
-      setGuides(data)
+      setServices(data)
     }
     return [];
   }
@@ -287,18 +286,15 @@ const ServiceTable = () => {
     getGuides()
   },[])
 
-  const rows = guides.map((guide: any) => {
+  const rows = services.map((service: ServiceType) => {
     return createData(
-      guide.name,
-      guide.description,
-      guide.price,
-      guide.active,
-      guide._id,
+      service.name,
+      service.description,
+      service.price,
+      service.active,
+      service._id ?? '',
     )
   }) 
-
-  console.log('ROWS', guides)
-
   
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -356,7 +352,6 @@ const ServiceTable = () => {
       rows.map((row) => {
         if(row.name === dni) {
           alert('Por ahora la función eliminar y editar no se encuentran habilitadas, comunicarse con el administrador de "Kusqi" para mayor información')
-        // touristGuideService.deleteTouristGuide(row._id)
         }        
       })
     })

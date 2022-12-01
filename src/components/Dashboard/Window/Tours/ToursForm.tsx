@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup'
 import { ClientType, ServiceType, TouristGuideType, TourType, VehiclesType } from '../../../../types';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserFromLocalStorage } from '../../../../features/actions';
 import { ReducerState } from '../../../../features/reducers';
@@ -13,6 +13,7 @@ import touristServices  from '../../../../services/touristServices'
 import { v4 as uuidv4 } from 'uuid';
 import tourService  from '../../../../services/tour'
 import touristGuideService  from '../../../../services/touristGuide'
+import { AppDispatch } from '../../../../features/hooks';
 
 
 
@@ -30,7 +31,7 @@ const initialValues: TourType = {
 }
 
 const TouristGuideForm = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: ReducerState) => state.user);
   const [clients, setClients] = useState([]);
   const [vehicles, setVehicles] = useState([]);
@@ -186,7 +187,7 @@ const TouristGuideForm = () => {
             error={formik.touched.client && Boolean(formik.errors.client)}
           > 
           {
-            clients.map((client: ClientType): any => {
+            clients.map((client: ClientType): ReactNode => {
               return <MenuItem key={client._id} value={client._id}>{client.dni} - {client.name} {client.lastName}</MenuItem>
             })
           }
@@ -204,7 +205,7 @@ const TouristGuideForm = () => {
             error={formik.touched.touristGuide && Boolean(formik.errors.touristGuide)}
           > 
           {
-            touristGuides.map((touristGuide: TouristGuideType): any => {
+            touristGuides.map((touristGuide: TouristGuideType): ReactNode => {
               return <MenuItem key={touristGuide._id} value={touristGuide._id}>{touristGuide.dni} - {touristGuide.name} {touristGuide.lastName}</MenuItem>
             })
           }
@@ -222,7 +223,7 @@ const TouristGuideForm = () => {
             error={formik.touched.vehicle && Boolean(formik.errors.vehicle)}
           > 
           {
-            vehicles.map((vehicle: VehiclesType): any => {
+            vehicles.map((vehicle: VehiclesType): ReactNode => {
               return <MenuItem key={vehicle._id} value={vehicle._id}>{vehicle.license_plate} - {vehicle.name} {vehicle.lastName}</MenuItem>
             })
           }
@@ -240,7 +241,7 @@ const TouristGuideForm = () => {
             error={formik.touched.service && Boolean(formik.errors.service)}
           > 
           {
-            touristServicesList.map((service: ServiceType): any => {
+            touristServicesList.map((service: ServiceType): ReactNode => {
                return <MenuItem key={service._id} value={service._id}>{service.name} - S/.{service.price}</MenuItem>
             })
           }
@@ -271,7 +272,7 @@ const TouristGuideForm = () => {
             error={formik.touched.status && Boolean(formik.errors.status)}
           > 
           {
-            TourStatus.map((status: string): any => {
+            TourStatus.map((status: string): ReactNode => {
               return <MenuItem key={status} value={status}>{translateStatus(status)}</MenuItem>
             })
           }

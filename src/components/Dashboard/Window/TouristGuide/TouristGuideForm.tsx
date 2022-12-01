@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserFromLocalStorage } from '../../../../features/actions';
 import { ReducerState } from '../../../../features/reducers';
+import { AppDispatch } from '../../../../features/hooks';
 
 const initialValues: TouristGuideType = {
     name: '',
@@ -18,7 +19,7 @@ const initialValues: TouristGuideType = {
 }
 
 const TouristGuideForm = () => {
-    const dispatch = useDispatch<any>();
+    const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: ReducerState) => state.user);
     useEffect(() => {
         dispatch(getUserFromLocalStorage)

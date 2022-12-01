@@ -1,5 +1,5 @@
-import { Button, DialogActions, FormControl, Input, InputLabel, TextareaAutosize, TextField } from '@mui/material';
-import { FormikValues, useFormik } from 'formik';
+import { Button, DialogActions, FormControl, TextareaAutosize, TextField } from '@mui/material';
+import { useFormik } from 'formik';
 import * as React from 'react';
 import { ServiceType } from '../../../../types';
 import * as yup from 'yup'
@@ -8,6 +8,7 @@ import { getUserFromLocalStorage } from '../../../../features/actions';
 import { ReducerState } from '../../../../features/reducers';
 import touristServices from '../../../../services/touristServices'
 import { useNavigate } from 'react-router-dom';
+import { AppDispatch } from '../../../../features/hooks';
 
 const initialValues: ServiceType = {
   name: '',
@@ -18,7 +19,7 @@ const initialValues: ServiceType = {
 }
 
 const ServiceForm = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: ReducerState) => state.user);
   const navigate = useNavigate();
 

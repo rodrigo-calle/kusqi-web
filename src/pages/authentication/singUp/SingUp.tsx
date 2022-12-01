@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,7 +15,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
 import { updateUserRegisterData } from '../../../features/actions';
-import { BusinessCategories, RegisterType } from '../../../types';
+import { RegisterType } from '../../../types';
 import { useFormik } from 'formik';
 import * as yup from 'yup'
 
@@ -22,8 +23,7 @@ interface SignUpPropsType {
     handleNext: () => void
 }
 
-function Copyright(props: any) {
-  return (
+function Copyright(props: any) {  return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
