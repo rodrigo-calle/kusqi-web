@@ -2,7 +2,6 @@ import React from 'react'
 import { Outlet } from 'react-router-dom';
 import MainNav from '../../components/Dashboard/MainNav/MainNav';
 import Navbar from '../../components/Dashboard/Navbar/Navbar';
-import Window from '../../components/Dashboard/Window/Window';
 import './Dashboard.scss';
 
 const DashboardPage = () => {

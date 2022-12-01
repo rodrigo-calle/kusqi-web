@@ -37,6 +37,7 @@ const getAllUsers = () => {
   return fetch(`${URL_BASE}/api/users/`, payload);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const updateUser = (data: any) => {
   const payload = {
     method: 'PATCH',
