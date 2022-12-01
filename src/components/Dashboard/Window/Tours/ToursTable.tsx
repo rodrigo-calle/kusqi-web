@@ -21,84 +21,76 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import clientsService from '../../../../services/clients';
-import { ClientType } from '../../../../types';
+import tourServices from '../../../../services/tour';
 import { useNavigate } from 'react-router'
+import { useSelector} from 'react-redux';
+import { ReducerState } from '../../../../features/reducers';
+import { TourType } from '../../../../types';
 
 interface Data {
-  name: string;
-  lastName: string;
+  capacity: number;
+  status: 'PENDING' | 'STARTED' | 'COMPLETE' | 'CANCELLED';
   phone: string;
-  dni: string;
-  provenance: string;
-  email: string;
+  notes: string;
+  key: string;
+  client: string;
+  vehicle: string;
+  service: string;
+  touristGuide: string;
+  user: string;
 }
 
 function createData(
-    name: string,
-    lastName: string,
-    phone: string,
-    dni: string,
-    provenance: string,
-    email: string,
-    _id: string,
-): ClientType {
+  capacity: number,
+  status: 'PENDING' | 'STARTED' | 'COMPLETE' | 'CANCELLED',
+  phone: string,
+  notes: string,
+  key: string,
+  client: string,
+  vehicle: string,
+  service: string,
+  touristGuide: string,
+  user: string,
+  _id: string,
+){
   return {
-    name,
-    lastName,
+    capacity,
+    status,
     phone,
-    dni,
-    provenance,
-    email,
+    notes,
+    key,
+    client,
+    vehicle,
+    service,
+    touristGuide,
+    user,
     _id,
   };
 }
 
-// const getClients = async () => {
-//   const response = await clientsService.getClients()
-//   if(response.ok) {
-//     const data = response.json()
-//     console.log('DATA', data)
+// function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+//   if (b[orderBy] < a[orderBy]) {
+//     return -1;
 //   }
-//   return []
+//   if (b[orderBy] > a[orderBy]) {
+//     return 1;
+//   }
+//   return 0;
 // }
-
-// getClients()
-
-// const rows = [
-//   createData(
-//     'Rodrigo',
-//     'Calle Castillo', 
-//     ['941658007', '929736017'], 
-//     '71103811',
-//     'Oxapampa',
-//     'rodrigoc_0@hotmail.com'
-//     ),
-// ];
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
 
 type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+  // function getComparator<Key extends keyof any>(
+  //   order: Order,
+  //   orderBy: Key,
+  // ): (
+  //   a: { [key in Key]: number | string },
+  //   b: { [key in Key]: number | string },
+  // ) => number {
+  //   return order === 'desc'
+  //     ? (a, b) => descendingComparator(a, b, orderBy)
+  //     : (a, b) => -descendingComparator(a, b, orderBy);
+  // }
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
@@ -123,41 +115,48 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'name',
+    id: 'key',
     numeric: false,
     disablePadding: true,
-    label: 'Nombre(s)',
+    label: 'Id',
   },
   {
-    id: 'lastName',
+    id: 'service',
     numeric: false,
     disablePadding: false,
-    label: 'Apellidos',
+    label: 'Servicio',
+  },
+  {
+    id: 'client',
+    numeric: false,
+    disablePadding: false,
+    label: 'Cliente',
   },
   {
     id: 'phone',
     numeric: false,
     disablePadding: false,
-    label: 'Número de Celulares',
+    label: 'N° Celular',
   },
   {
-    id: 'dni',
+    id: 'touristGuide',
     numeric: false,
     disablePadding: false,
-    label: 'N° DNI',
+    label: 'Guía Turistico',
   },
   {
-    id: 'provenance',
+    id: 'vehicle',
     numeric: false,
     disablePadding: false,
-    label: 'Procedencia',
+    label: 'Vehículo',
   },
   {
-    id: 'email',
+    id: 'status',
     numeric: false,
     disablePadding: false,
-    label: 'Email',
+    label: 'Estado',
   },
+  
 ];
 
 interface EnhancedTableProps {
@@ -251,7 +250,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Lista de Clientes
+          Lista de Guías Turísticos
         </Typography>
       )}
       {numSelected > 0 ? (
@@ -278,43 +277,48 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-const ClientTable = () => {
+const TourTable = () => {
   const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('provenance');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('status');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [clients, setClients] = React.useState([])
-
-  const getClients = async () => {
-    const response = await clientsService.getClients()
+  const [tours, setTours] = React.useState([])
+  const user = useSelector((state: ReducerState) => state.user)
+  const getTours = async () => {
+    const response = await tourServices.getUserTour(user?.id ?? '')
     const data = await response.json();
 
     if(response.ok) {
-      setClients(data)
+      setTours(data)
     }
     return [];
   }
-
+ 
   React.useEffect(() => {
-    getClients()
+    getTours()
   },[])
-  console.log('SELECTED', selected)
-  const rows = clients.map((client: ClientType) => {
+
+  const rows = tours.map((tour: TourType) => {
     return createData(
-      client.name,
-      client.lastName,
-      client.phone,
-      client.dni,
-      client.provenance,
-      client.email,
-      client._id,
+      tour.capacity,
+      tour.status,
+      tour.phone,
+      tour.notes,
+      tour.key,
+      tour.client,
+      tour.vehicle,
+      tour.service,
+      tour.touristGuide,
+      tour.user,
+      tour._id,
     )
   }) 
 
-  console.log('ROWS', clients)
+
+
 
   
   const handleRequestSort = (
@@ -328,19 +332,19 @@ const ClientTable = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.dni);
+      const newSelected = rows.map((n) => n.key);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, dni: string) => {
-    const selectedIndex = selected.indexOf(dni);
+  const handleClick = (event: React.MouseEvent<unknown>, key: string) => {
+    const selectedIndex = selected.indexOf(key);
     let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, dni);
+      newSelected = newSelected.concat(selected, key);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -369,16 +373,17 @@ const ClientTable = () => {
   };
 
   const handleDelete = ():void => {
-    selected.map((dni) => {
+    selected.map((key) => {
       rows.map((row) => {
-        if(row.dni === dni) {
-          clientsService.deleteClient(row._id)
+        if(row.key === key) {
+        // touristGuideService.deleteTouristGuide(row._id)
+          alert('Por ahora la función eliminar y editar no se encuentran habilitadas, comunicarse con el administrador de "Kusqi" para mayor información')
         }        
       })
     })
 
     navigate(0)
-  }
+  } 
   const isSelected = (dni: string) => selected.indexOf(dni) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -410,17 +415,17 @@ const ClientTable = () => {
               // stableSort(rows, getComparator(order, orderBy))
                 rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.dni);
+                  const isItemSelected = isSelected(row.key);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.dni)}
+                      onClick={(event) => handleClick(event, row.key)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.dni}
+                      key={row.key}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -438,13 +443,14 @@ const ClientTable = () => {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.key.slice(0,5)}
                       </TableCell>
-                      <TableCell align="right">{row.lastName}</TableCell>
+                      <TableCell align="right">{row.service}</TableCell>
+                      <TableCell align="right">{row.client}</TableCell>
                       <TableCell align="right">{row.phone}</TableCell>
-                      <TableCell align="right">{row.dni}</TableCell>
-                      <TableCell align="right">{row.provenance}</TableCell>
-                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="right">{row.touristGuide}</TableCell>
+                      <TableCell align="right">{row.vehicle}</TableCell>
+                      <TableCell align="right">{row.status}</TableCell>
                     </TableRow>
                     
                   );
@@ -479,4 +485,4 @@ const ClientTable = () => {
   );
 }
 
-export default ClientTable;
+export default TourTable;

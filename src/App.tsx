@@ -5,17 +5,22 @@ import './App.scss';
 import Clients from './components/Dashboard/Window/Clients/Clients';
 import Home from './components/Dashboard/Window/Home/Home';
 import Promos from './components/Dashboard/Window/Promos/Promos';
-import Services from './components/Dashboard/Window/Services/Services';
+import Report from './components/Dashboard/Window/Reports/Reports';
+import Services from './components/Dashboard/Window/TouristServices/Services';
 import Settings from './components/Dashboard/Window/Settings/Settings';
+import TouristGuide from './components/Dashboard/Window/TouristGuide/TouristGuide';
 import Tours from './components/Dashboard/Window/Tours/Tours';
+import Vehicles from './components/Dashboard/Window/Vehicles/Vehicles';
 import DashboardPage from './pages/admin/Dashboard';
 import SignIn from './pages/authentication/singIn/SingIn';
 import Register from './pages/authentication/singUp/Index';
+import HomePage from './pages/home/homePage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/' element={<HomePage />} />
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<Register />} />
         {/* <Route path='/dashboard/' element={<PrivateRoute>
@@ -30,7 +35,11 @@ function App() {
           <Route path='clients' element={<Clients />} />
           <Route path='promos' element={<Promos />} />
           <Route path='settings' element={<Settings />} />
+          <Route path='tourist-guide' element={<TouristGuide />} />
+          <Route path='reports' element={<Report />} />
+          <Route path='vehicles' element={<Vehicles />} />
         </Route>
+        <Route path='*' element={<HomePage />} />
       </Routes>    
     </BrowserRouter>
   

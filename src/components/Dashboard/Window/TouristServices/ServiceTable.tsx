@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import * as React from 'react';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -21,41 +22,36 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import clientsService from '../../../../services/clients';
-import { ClientType } from '../../../../types';
+import touristService from '../../../../services/touristServices';
 import { useNavigate } from 'react-router'
+import { useSelector} from 'react-redux';
+import { ReducerState } from '../../../../features/reducers';
 
 interface Data {
   name: string;
-  lastName: string;
-  phone: string;
-  dni: string;
-  provenance: string;
-  email: string;
+  description: string;
+  price: number;
+  active: boolean;
 }
 
 function createData(
     name: string,
-    lastName: string,
-    phone: string,
-    dni: string,
-    provenance: string,
-    email: string,
+    description: string,
+    price: number,
+    active: boolean,
     _id: string,
-): ClientType {
+){
   return {
     name,
-    lastName,
-    phone,
-    dni,
-    provenance,
-    email,
+    description,
+    price,
+    active,
     _id,
   };
 }
 
-// const getClients = async () => {
-//   const response = await clientsService.getClients()
+// const getGuides = async () => {
+//   const response = await guidesService.getGuides()
 //   if(response.ok) {
 //     const data = response.json()
 //     console.log('DATA', data)
@@ -63,7 +59,7 @@ function createData(
 //   return []
 // }
 
-// getClients()
+// getGuides()
 
 // const rows = [
 //   createData(
@@ -129,34 +125,22 @@ const headCells: readonly HeadCell[] = [
     label: 'Nombre(s)',
   },
   {
-    id: 'lastName',
+    id: 'description',
     numeric: false,
     disablePadding: false,
-    label: 'Apellidos',
+    label: 'Descripción',
   },
   {
-    id: 'phone',
+    id: 'price',
     numeric: false,
     disablePadding: false,
-    label: 'Número de Celulares',
+    label: 'Precio',
   },
   {
-    id: 'dni',
+    id: 'active',
     numeric: false,
     disablePadding: false,
-    label: 'N° DNI',
-  },
-  {
-    id: 'provenance',
-    numeric: false,
-    disablePadding: false,
-    label: 'Procedencia',
-  },
-  {
-    id: 'email',
-    numeric: false,
-    disablePadding: false,
-    label: 'Email',
+    label: 'Estado',
   },
 ];
 
@@ -251,7 +235,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Lista de Clientes
+          Lista de Vehículos
         </Typography>
       )}
       {numSelected > 0 ? (
@@ -278,43 +262,42 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-const ClientTable = () => {
+const ServiceTable = () => {
   const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('provenance');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [clients, setClients] = React.useState([])
+  const [guides, setGuides] = React.useState([])
+  const user = useSelector((state: ReducerState) => state.user)
 
-  const getClients = async () => {
-    const response = await clientsService.getClients()
+  const getGuides = async () => {
+    const response = await touristService.getUserServices(user?.id ?? '')
     const data = await response.json();
 
     if(response.ok) {
-      setClients(data)
+      setGuides(data)
     }
     return [];
   }
 
   React.useEffect(() => {
-    getClients()
+    getGuides()
   },[])
-  console.log('SELECTED', selected)
-  const rows = clients.map((client: ClientType) => {
+
+  const rows = guides.map((guide: any) => {
     return createData(
-      client.name,
-      client.lastName,
-      client.phone,
-      client.dni,
-      client.provenance,
-      client.email,
-      client._id,
+      guide.name,
+      guide.description,
+      guide.price,
+      guide.active,
+      guide._id,
     )
   }) 
 
-  console.log('ROWS', clients)
+  console.log('ROWS', guides)
 
   
   const handleRequestSort = (
@@ -328,19 +311,19 @@ const ClientTable = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.dni);
+      const newSelected = rows.map((n) => n.name);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, dni: string) => {
-    const selectedIndex = selected.indexOf(dni);
+  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+    const selectedIndex = selected.indexOf(name);
     let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, dni);
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -371,13 +354,14 @@ const ClientTable = () => {
   const handleDelete = ():void => {
     selected.map((dni) => {
       rows.map((row) => {
-        if(row.dni === dni) {
-          clientsService.deleteClient(row._id)
+        if(row.name === dni) {
+          alert('Por ahora la función eliminar y editar no se encuentran habilitadas, comunicarse con el administrador de "Kusqi" para mayor información')
+        // touristGuideService.deleteTouristGuide(row._id)
         }        
       })
     })
 
-    navigate(0)
+    // navigate(0)
   }
   const isSelected = (dni: string) => selected.indexOf(dni) !== -1;
 
@@ -410,17 +394,17 @@ const ClientTable = () => {
               // stableSort(rows, getComparator(order, orderBy))
                 rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.dni);
+                  const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.dni)}
+                      onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.dni}
+                      key={row.name}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -440,13 +424,10 @@ const ClientTable = () => {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.lastName}</TableCell>
-                      <TableCell align="right">{row.phone}</TableCell>
-                      <TableCell align="right">{row.dni}</TableCell>
-                      <TableCell align="right">{row.provenance}</TableCell>
-                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="left">{row.description === ''? '-' : row.description}</TableCell>
+                      <TableCell align="left">S/.{row.price}</TableCell>
+                      <TableCell align="left">{row.active? 'Activo': 'No Activo'}</TableCell>
                     </TableRow>
-                    
                   );
                 })}
               {emptyRows > 0 && (
@@ -479,4 +460,4 @@ const ClientTable = () => {
   );
 }
 
-export default ClientTable;
+export default ServiceTable;

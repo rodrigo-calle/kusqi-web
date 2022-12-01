@@ -59,9 +59,12 @@ export const logInUser = (user: LoginType) => async (dispatch: Dispatch) => {
         localStorage.setItem('token', data.token);
         const decoded = jwt_decode(data.token);
         dispatch(loginUserMethod(decoded));
+        return response
       }
+
+      return response
     } catch (error) {
-      console.log(error);
+      return error
     }
 };
 

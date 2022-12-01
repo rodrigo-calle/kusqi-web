@@ -14,6 +14,17 @@ const createClient = (client: ClientType) => {
     return fetch(`${URL_BASE}/api/clients`, payload)
 }
 
+const getClientById = (id: string) => {
+    const payload = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    };
+
+    return fetch(`${URL_BASE}/api/clients/client/${id}`, payload)
+}
+
 const getClients = () => {
     const payload = {
         method: 'GET',
@@ -22,6 +33,16 @@ const getClients = () => {
         },
     };
     return fetch(`${URL_BASE}/api/clients`, payload)
+}
+
+const getUserClients = (userId: string) => {
+    const payload = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    };
+    return fetch(`${URL_BASE}/api/clients/user/${userId}`, payload)
 }
 
 const updateClient = (id: string, data: ClientType) => {
@@ -50,7 +71,9 @@ const client = {
     createClient,
     getClients,
     updateClient,
-    deleteClient
+    deleteClient,
+    getUserClients,
+    getClientById
 }
 
 export default client;

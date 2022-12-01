@@ -21,35 +21,55 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import './ServiceTable.scss';
+import touristGuideService from '../../../../services/touristGuide';
+import { useNavigate } from 'react-router'
+import { useSelector} from 'react-redux';
+import { ReducerState } from '../../../../features/reducers';
 
 interface Data {
-  description: string;
-  price: number;
-  discount: number;
   name: string;
-  image: string,
+  lastName: string;
+  phone: string;
+  dni: string;
 }
 
 function createData(
-  name: string,
-  description: string,
-  price: number,
-  discount: number,
-  image: string,
-): Data {
+    name: string,
+    lastName: string,
+    phone: string,
+    dni: string,
+    _id: string,
+){
   return {
     name,
-    description,
-    price,
-    discount,
-    image,    
+    lastName,
+    phone,
+    dni,
+    _id,
   };
 }
 
-const rows = [
-  createData('Cupcake', 'description', 3.7, 67, 'https//image.com/assd'),
-];
+// const getGuides = async () => {
+//   const response = await guidesService.getGuides()
+//   if(response.ok) {
+//     const data = response.json()
+//     console.log('DATA', data)
+//   }
+//   return []
+// }
+
+// getGuides()
+
+// const rows = [
+//   createData(
+//     'Rodrigo',
+//     'Calle Castillo', 
+//     ['941658007', '929736017'], 
+//     '71103811',
+//     'Oxapampa',
+//     'rodrigoc_0@hotmail.com'
+//     ),
+// ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -77,17 +97,17 @@ function getComparator<Key extends keyof any>(
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+// function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
+//   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+//   stabilizedThis.sort((a, b) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) {
+//       return order;
+//     }
+//     return a[1] - b[1];
+//   });
+//   return stabilizedThis.map((el) => el[0]);
+// }
 
 interface HeadCell {
   disablePadding: boolean;
@@ -101,31 +121,25 @@ const headCells: readonly HeadCell[] = [
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'Nombre',
+    label: 'Nombre(s)',
   },
   {
-    id: 'description',
+    id: 'lastName',
     numeric: false,
     disablePadding: false,
-    label: 'Descripción',
+    label: 'Apellidos',
   },
   {
-    id: 'price',
-    numeric: true,
-    disablePadding: false,
-    label: 'Precio (S/.)',
-  },
-  {
-    id: 'discount',
-    numeric: true,
-    disablePadding: false,
-    label: 'Descuento (%)',
-  },
-  {
-    id: 'image',
+    id: 'phone',
     numeric: false,
     disablePadding: false,
-    label: 'Imagen',
+    label: 'N° Celular',
+  },
+  {
+    id: 'dni',
+    numeric: false,
+    disablePadding: false,
+    label: 'N° DNI',
   },
 ];
 
@@ -188,11 +202,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  handleDelete: any;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
-
+  const { numSelected, handleDelete } = props;
   return (
     <Toolbar
       sx={{
@@ -220,7 +234,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Servicios Turísticos
+          Lista de Guías Turísticos
         </Typography>
       )}
       {numSelected > 0 ? (
@@ -231,7 +245,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             </IconButton>
           </Tooltip>
           <Tooltip title="Eliminar">
-            <IconButton>
+            <IconButton onClick={() => handleDelete()}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -247,14 +261,42 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-const ServiceTable = () => {
+const TouristGuideTable = () => {
+  const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('price');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [guides, setGuides] = React.useState([])
+  const user = useSelector((state: ReducerState) => state.user)
+  const getGuides = async () => {
+    const response = await touristGuideService.getUserTouristGuides(user?.id ?? '')
+    const data = await response.json();
 
+    if(response.ok) {
+      setGuides(data)
+    }
+    return [];
+  }
+
+  React.useEffect(() => {
+    getGuides()
+  },[])
+  const rows = guides.map((guide: any) => {
+    return createData(
+      guide.name,
+      guide.lastName,
+      guide.phone,
+      guide.dni,
+      guide._id,
+    )
+  }) 
+
+  console.log('ROWS', guides)
+
+  
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data,
@@ -266,19 +308,19 @@ const ServiceTable = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
+      const newSelected = rows.map((n) => n.dni);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event: React.MouseEvent<unknown>, dni: string) => {
+    const selectedIndex = selected.indexOf(dni);
     let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, dni);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -306,7 +348,18 @@ const ServiceTable = () => {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const handleDelete = ():void => {
+    selected.map((dni) => {
+      rows.map((row) => {
+        if(row.dni === dni) {
+        touristGuideService.deleteTouristGuide(row._id)
+        }        
+      })
+    })
+
+    navigate(0)
+  }
+  const isSelected = (dni: string) => selected.indexOf(dni) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -315,7 +368,7 @@ const ServiceTable = () => {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -333,20 +386,21 @@ const ServiceTable = () => {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              {
+              // stableSort(rows, getComparator(order, orderBy))
+                rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.dni);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.dni)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.dni}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -366,11 +420,11 @@ const ServiceTable = () => {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">S/.{row.price}</TableCell>
-                      <TableCell align="right">{row.discount}%</TableCell>
-                      <TableCell align="right">{row.image}</TableCell>
+                      <TableCell align="right">{row.lastName}</TableCell>
+                      <TableCell align="right">{row.phone}</TableCell>
+                      <TableCell align="right">{row.dni}</TableCell>
                     </TableRow>
+                    
                   );
                 })}
               {emptyRows > 0 && (
@@ -403,4 +457,4 @@ const ServiceTable = () => {
   );
 }
 
-export default ServiceTable;
+export default TouristGuideTable;

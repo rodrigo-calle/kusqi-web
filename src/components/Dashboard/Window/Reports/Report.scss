@@ -1,0 +1,16 @@
+.report-container {
+    .report-container__image-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 70px;
+        img {
+            height: 250px;
+            width: 250px;
+            background-color: #d0f2ff;
+            padding: 20px;
+            border-radius: 50%;
+        }
+    }
+}

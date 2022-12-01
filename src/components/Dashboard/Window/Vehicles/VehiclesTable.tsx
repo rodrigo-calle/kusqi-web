@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import * as React from 'react';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -21,41 +22,39 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import clientsService from '../../../../services/clients';
-import { ClientType } from '../../../../types';
+import vehiclesService from '../../../../services/vehicles';
 import { useNavigate } from 'react-router'
+import { useSelector} from 'react-redux';
+import { ReducerState } from '../../../../features/reducers';
 
 interface Data {
   name: string;
   lastName: string;
   phone: string;
-  dni: string;
-  provenance: string;
-  email: string;
+  license_plate: string;
+  seats_number: number;
 }
 
 function createData(
     name: string,
     lastName: string,
     phone: string,
-    dni: string,
-    provenance: string,
-    email: string,
+    license_plate: string,
+    seats_number: string,
     _id: string,
-): ClientType {
+){
   return {
     name,
     lastName,
     phone,
-    dni,
-    provenance,
-    email,
+    license_plate,
+    seats_number,
     _id,
   };
 }
 
-// const getClients = async () => {
-//   const response = await clientsService.getClients()
+// const getGuides = async () => {
+//   const response = await guidesService.getGuides()
 //   if(response.ok) {
 //     const data = response.json()
 //     console.log('DATA', data)
@@ -63,7 +62,7 @@ function createData(
 //   return []
 // }
 
-// getClients()
+// getGuides()
 
 // const rows = [
 //   createData(
@@ -138,25 +137,19 @@ const headCells: readonly HeadCell[] = [
     id: 'phone',
     numeric: false,
     disablePadding: false,
-    label: 'Número de Celulares',
+    label: 'N° Celular',
   },
   {
-    id: 'dni',
+    id: 'license_plate',
     numeric: false,
     disablePadding: false,
-    label: 'N° DNI',
+    label: 'N° de Placa',
   },
   {
-    id: 'provenance',
-    numeric: false,
+    id: 'seats_number',
+    numeric: true,
     disablePadding: false,
-    label: 'Procedencia',
-  },
-  {
-    id: 'email',
-    numeric: false,
-    disablePadding: false,
-    label: 'Email',
+    label: 'N° de Asientos',
   },
 ];
 
@@ -251,7 +244,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Lista de Clientes
+          Lista de Vehículos
         </Typography>
       )}
       {numSelected > 0 ? (
@@ -278,43 +271,43 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-const ClientTable = () => {
+const VehiclesTable = () => {
   const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('provenance');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [clients, setClients] = React.useState([])
+  const [guides, setGuides] = React.useState([])
+  const user = useSelector((state: ReducerState) => state.user)
 
-  const getClients = async () => {
-    const response = await clientsService.getClients()
+  const getGuides = async () => {
+    const response = await vehiclesService.getUserVehicles(user?.id ?? '')
     const data = await response.json();
 
     if(response.ok) {
-      setClients(data)
+      setGuides(data)
     }
     return [];
   }
 
   React.useEffect(() => {
-    getClients()
+    getGuides()
   },[])
-  console.log('SELECTED', selected)
-  const rows = clients.map((client: ClientType) => {
+
+  const rows = guides.map((guide: any) => {
     return createData(
-      client.name,
-      client.lastName,
-      client.phone,
-      client.dni,
-      client.provenance,
-      client.email,
-      client._id,
+      guide.name,
+      guide.lastName,
+      guide.phone,
+      guide.license_plate,
+      guide.seats_number,
+      guide._id,
     )
   }) 
 
-  console.log('ROWS', clients)
+  console.log('ROWS', guides)
 
   
   const handleRequestSort = (
@@ -328,19 +321,19 @@ const ClientTable = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.dni);
+      const newSelected = rows.map((n) => n.license_plate);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, dni: string) => {
-    const selectedIndex = selected.indexOf(dni);
+  const handleClick = (event: React.MouseEvent<unknown>, license_plate: string) => {
+    const selectedIndex = selected.indexOf(license_plate);
     let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, dni);
+      newSelected = newSelected.concat(selected, license_plate);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -371,13 +364,14 @@ const ClientTable = () => {
   const handleDelete = ():void => {
     selected.map((dni) => {
       rows.map((row) => {
-        if(row.dni === dni) {
-          clientsService.deleteClient(row._id)
+        if(row.license_plate === dni) {
+          alert('Por ahora la función eliminar y editar no se encuentran habilitadas, comunicarse con el administrador de "Kusqi" para mayor información')
+        // touristGuideService.deleteTouristGuide(row._id)
         }        
       })
     })
 
-    navigate(0)
+    // navigate(0)
   }
   const isSelected = (dni: string) => selected.indexOf(dni) !== -1;
 
@@ -410,17 +404,17 @@ const ClientTable = () => {
               // stableSort(rows, getComparator(order, orderBy))
                 rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.dni);
+                  const isItemSelected = isSelected(row.license_plate);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.dni)}
+                      onClick={(event) => handleClick(event, row.license_plate)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.dni}
+                      key={row.license_plate}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -442,9 +436,8 @@ const ClientTable = () => {
                       </TableCell>
                       <TableCell align="right">{row.lastName}</TableCell>
                       <TableCell align="right">{row.phone}</TableCell>
-                      <TableCell align="right">{row.dni}</TableCell>
-                      <TableCell align="right">{row.provenance}</TableCell>
-                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="right">{row.license_plate}</TableCell>
+                      <TableCell align="right">{row.seats_number}</TableCell>
                     </TableRow>
                     
                   );
@@ -479,4 +472,4 @@ const ClientTable = () => {
   );
 }
 
-export default ClientTable;
+export default VehiclesTable;
