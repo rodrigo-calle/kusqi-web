@@ -1,6 +1,6 @@
 import { LoginType } from '../types';
 
-const URL_BASE = 'http://localhost:8080'
+const URL_BASE = process.env.REACT_APP_API_URL_BASE;
 
 const loginAccount = ({ email, password }: LoginType) => {
   const payload = {

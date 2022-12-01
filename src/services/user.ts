@@ -1,8 +1,6 @@
 import { BusinessCategories, RegisterType } from '../types';
 
-// const URL_BASE = process.env.REACT_APP_API_URL_BASE;
-const URL_BASE = 'http://localhost:8080'
-
+const URL_BASE = process.env.REACT_APP_API_URL_BASE;
 
 const createUser = (data: RegisterType) => {
   const payload = {
