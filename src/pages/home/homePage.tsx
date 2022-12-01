@@ -5,12 +5,13 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { getUserFromLocalStorage } from '../../features/actions';
+import { AppDispatch, RootState } from '../../features/hooks';
 import './homePage.scss';
 
 const HomePage = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch<any>()
-    const user = useSelector((state: any) => state.user)
+    const dispatch = useDispatch<AppDispatch>()
+    const user = useSelector((state: RootState) => state.user)
 
     useEffect(()=> {
         dispatch(getUserFromLocalStorage)

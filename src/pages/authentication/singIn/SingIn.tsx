@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -16,7 +17,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 // import authServices from '../../../services/auth';
 import { useDispatch } from 'react-redux';
-import { getUserFromLocalStorage, logInUser } from '../../../features/actions';
+import { logInUser } from '../../../features/actions';
 import { useNavigate } from 'react-router-dom';
 
 function Copyright(props: any) {

@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserFromLocalStorage } from '../../../../features/actions';
 import { ReducerState } from '../../../../features/reducers';
+import { AppDispatch } from '../../../../features/hooks';
 
 const initialValues: VehiclesType = {
     name: '',
@@ -20,7 +21,7 @@ const initialValues: VehiclesType = {
 }
 
 const VehicleForm = () => {
-    const dispatch = useDispatch<any>();
+    const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: ReducerState) => state.user);
     useEffect(() => {
         dispatch(getUserFromLocalStorage)

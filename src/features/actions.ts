@@ -26,14 +26,17 @@ export const updateUserRegistration = (user: RegisterType) => ({type: LOAD_USER,
 
 // sesion handler
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const loginUserMethod = (user: any) => ({ type: LOGIN_USER, payload: user });
 export const logoutUserMethod = (token: string | null) => ({ type: LOGOUT_USER, payload: token });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getUserFromLocalStorageMethod = (user: any) => ({
     type: GET_USER_FROM_LOCAL_STORAGE,
     payload: user,
   });
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const loadUserRegisterData = async (dispatch: Dispatch, user: RegisterType) => {
     try {
         return store.getState()
@@ -61,7 +64,6 @@ export const logInUser = (user: LoginType) => async (dispatch: Dispatch) => {
         dispatch(loginUserMethod(decoded));
         return response
       }
-
       return response
     } catch (error) {
       return error
@@ -69,7 +71,7 @@ export const logInUser = (user: LoginType) => async (dispatch: Dispatch) => {
 };
 
 
-export const getUserFromLocalStorage = async (dispatch: Dispatch) => {
+export const getUserFromLocalStorage = async (dispatch: Dispatch): Promise<void> => {
     try {
         const token = localStorage.getItem('token');
         if (token) {

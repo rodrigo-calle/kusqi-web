@@ -16,6 +16,7 @@ import './MainNav.scss';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../features/actions';
 import { useNavigate } from 'react-router-dom';
+import { AppDispatch } from '../../../features/hooks';
 
 const pages = ['Inicio', 'Ir a Tienda'];
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -23,7 +24,7 @@ const settings = ['Salir'];
 
 
 const MainNav = () => {
-  const dispatch = useDispatch<any>()
+  const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);

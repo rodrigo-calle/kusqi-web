@@ -12,6 +12,7 @@ interface PickCategoryProps {
     handleNext: () => void
 }
 const PickCategory = (props: PickCategoryProps) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dispatch = useDispatch<any>();
     const { handleNext } = props;
     const handleCategorySelected = async (category: BusinessCategories): Promise<void> => {

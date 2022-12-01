@@ -218,7 +218,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  handleDelete: any;
+  handleDelete: () => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -313,7 +313,7 @@ const TourTable = () => {
       tour.service,
       tour.touristGuide,
       tour.user,
-      tour._id,
+      tour._id ?? '',
     )
   }) 
 

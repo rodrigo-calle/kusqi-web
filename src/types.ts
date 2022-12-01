@@ -11,8 +11,8 @@ export interface TouristGuideType {
     lastName: string;
     phone: string;
     dni: string;
-    user: any;
-    _id?: any;
+    user: string;
+    _id?: string;
 }
 
 export interface VehiclesType {
@@ -21,8 +21,8 @@ export interface VehiclesType {
     phone: string;
     license_plate: string;
     seats_number: number;
-    user: any;
-    _id?: any;
+    user: string;
+    _id?: string;
 }
 
 export enum BusinessCategories {
@@ -40,8 +40,8 @@ export interface ServiceType {
     price: number;
     // discount: number;
     active: boolean;
-    user: any;
-    _id?: any;
+    user: string;
+    _id?: string;
 }
 
 export interface ClientType {
@@ -51,7 +51,7 @@ export interface ClientType {
     dni: string;
     provenance: string;
     email: string;
-    _id?: any;
+    _id?: string;
 }
 
 export interface LoginType {
@@ -72,12 +72,12 @@ export interface TourType {
     phone: string;
     notes: string;
     key: string;
-    client: any;
-    vehicle: any;
-    service: any;
-    touristGuide: any;
-    user: any;
-    _id?: any;
+    client: string;
+    vehicle: string;
+    service: string;
+    touristGuide: string;
+    user: string;
+    _id?: string;
 }
 // name: string;
 // lastName: string;

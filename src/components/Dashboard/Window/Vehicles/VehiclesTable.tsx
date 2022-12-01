@@ -23,9 +23,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import vehiclesService from '../../../../services/vehicles';
-import { useNavigate } from 'react-router'
 import { useSelector} from 'react-redux';
 import { ReducerState } from '../../../../features/reducers';
+import { VehiclesType } from '../../../../types';
 
 interface Data {
   name: string;
@@ -40,7 +40,7 @@ function createData(
     lastName: string,
     phone: string,
     license_plate: string,
-    seats_number: string,
+    seats_number: number,
     _id: string,
 ){
   return {
@@ -75,29 +75,29 @@ function createData(
 //     ),
 // ];
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+// function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+//   if (b[orderBy] < a[orderBy]) {
+//     return -1;
+//   }
+//   if (b[orderBy] > a[orderBy]) {
+//     return 1;
+//   }
+//   return 0;
+// }
 
 type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+// function getComparator<Key extends keyof any>(
+//   order: Order,
+//   orderBy: Key,
+// ): (
+//   a: { [key in Key]: number | string },
+//   b: { [key in Key]: number | string },
+// ) => number {
+//   return order === 'desc'
+//     ? (a, b) => descendingComparator(a, b, orderBy)
+//     : (a, b) => -descendingComparator(a, b, orderBy);
+// }
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
@@ -212,7 +212,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  handleDelete: any;
+  handleDelete: () => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -272,14 +272,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 const VehiclesTable = () => {
-  const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [guides, setGuides] = React.useState([])
+  const [vehicles, setVehicles] = React.useState([])
   const user = useSelector((state: ReducerState) => state.user)
 
   const getGuides = async () => {
@@ -287,7 +286,7 @@ const VehiclesTable = () => {
     const data = await response.json();
 
     if(response.ok) {
-      setGuides(data)
+      setVehicles(data)
     }
     return [];
   }
@@ -296,20 +295,17 @@ const VehiclesTable = () => {
     getGuides()
   },[])
 
-  const rows = guides.map((guide: any) => {
+  const rows = vehicles.map((vehicle: VehiclesType) => {
     return createData(
-      guide.name,
-      guide.lastName,
-      guide.phone,
-      guide.license_plate,
-      guide.seats_number,
-      guide._id,
+      vehicle.name,
+      vehicle.lastName,
+      vehicle.phone,
+      vehicle.license_plate,
+      vehicle.seats_number,
+      vehicle?._id ?? '',
     )
   }) 
 
-  console.log('ROWS', guides)
-
-  
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data,

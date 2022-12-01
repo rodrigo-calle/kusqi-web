@@ -34,6 +34,7 @@ const initialState: ReducerState = {
     user: null,
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function reducer(state = initialState, action: any) {
     switch (action.type) {
         case LOGIN_USER:

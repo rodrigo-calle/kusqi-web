@@ -131,7 +131,7 @@ const Register = () => {
             )}
             <Button onClick={handleNext} disabled={activeStep === 0 || activeStep === 1}>
 
-              {activeStep === steps.length - 1 ? 'Finish' : 'Siguiente'}
+              {activeStep === steps.length - 1 ? '' : 'Siguiente'}
             </Button>
           </Box>
         </React.Fragment>
