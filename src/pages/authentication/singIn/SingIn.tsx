@@ -15,10 +15,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 // import authServices from '../../../services/auth';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getUserFromLocalStorage, logInUser } from '../../../features/actions';
 import { useNavigate } from 'react-router-dom';
-import { ReducerState } from '../../../features/reducers';
 
 function Copyright(props: any) {
   return (
@@ -57,15 +56,22 @@ const SignIn = () => {
     initialValues,
     onSubmit: async (values) => {
       try {
-        const test = dispatch(logInUser({
+        dispatch(logInUser({
           email: values.email,
           password: values.password,
-        })).then((value: any) => console.log(value))
+        })).then((value: any) => {
+          if(value.status === 200) {
+            navigate('/dashboard/home/')
+          } else {
+            alert('Revise nuevamente los credenciales por favor')
+          }
+        }).catch(
+          console.log('Login exitoso')
+        )
 
-        console.log(test)
-        dispatch(getUserFromLocalStorage);
+        // dispatch(getUserFromLocalStorage);
         // const user = await useSelector((state: ReducerState) => state.user)
-        navigate('/dashboard/home/')
+      
       } catch (error) {
         console.log('login error', error)
       }

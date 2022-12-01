@@ -2,32 +2,31 @@ import { Button } from '@mui/material';
 import DialogDashboard from '../Dialog/Dialog';
 import AddIcon from '@mui/icons-material/Add';
 import UseModal from '../TouristServices/useModal';
-import TouristGuideForm from './ToursForm';
-import TourTable from './ToursTable';
+import VehicleForm from './VehiclesForm';
+import VehiclesTable from './VehiclesTable';
 
-const Tours = () => {
+const Vehicles = () => {
     const {isOpen, toggle} = UseModal();
     return (
         <div className='client-dashboard'>
             <DialogDashboard 
                 isOpen={isOpen}
                 toggle={toggle}
-                title={'Nuevo Tour'}
+                title={'Nuevo Vehículo'}
             >
-                <TouristGuideForm />
+                <VehicleForm />
             </DialogDashboard>
             <div className='client-dashboard__title-container'>
-                <h1 className='client-dashboard__title-container--title'>Tours</h1>
+                <h1 className='client-dashboard__title-container--title'>Vehículos</h1>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={toggle}>
-                    Agregar Tour
+                    Agregar Vehículo
                 </Button>
             </div>
             <div className='client-dashboard__table'>
-                {/* <TouristGuideTable /> */}
-                <TourTable />
+                <VehiclesTable />
             </div>
         </div>
     )
 }  
 
-export default Tours;
+export default Vehicles;

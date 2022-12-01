@@ -5,12 +5,16 @@ import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import SettingsIcon from '@mui/icons-material/Settings';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 
 import './Navbar.scss';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReducerState } from '../../../features/reducers';
 import { getUserFromLocalStorage } from '../../../features/actions';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const Navbar = () => {
     const shop = useSelector((state: ReducerState) => state.user)
@@ -50,8 +54,8 @@ const Navbar = () => {
             <div className='dashboard_navbar__user-container'>
                 <div className='dashboard_narvbar__user-container--icon'>{shop.name}</div>
                 <div className='dashboard_narvbar__user-container--username'>
-                    <img src="https://icongr.am/clarity/user.svg?size=128&color=94d1ff" alt='user-icon' />
-                    <h6>Nombre de Usuario</h6>
+                    <AdminPanelSettingsIcon />
+                    <h6>Administrador</h6>
                 </div>
             </div>
             <ul className='dashboard_navbar__menu-container'>
@@ -102,6 +106,30 @@ const Navbar = () => {
                         </div>
                         <div className='menu-container__item--text'>
                             Promociones    
+                        </div>
+                    </li>
+                    <li id="guidesOption" className='menu-container__item' onClick={() => handlerMenuNavigation('tourist-guide') }>
+                        <div className='menu-container__item--icon'>
+                            <AssignmentIndIcon />
+                        </div>
+                        <div className='menu-container__item--text'>
+                            Guía Turístico    
+                        </div>
+                    </li>
+                    <li id="vehiclesOption" className='menu-container__item' onClick={() => handlerMenuNavigation('vehicles') }>
+                        <div className='menu-container__item--icon'>
+                            <DirectionsCarIcon />
+                        </div>
+                        <div className='menu-container__item--text'>
+                            Vehiculos   
+                        </div>
+                    </li>
+                    <li id="reportsOption" className='menu-container__item' onClick={() => handlerMenuNavigation('reports') }>
+                        <div className='menu-container__item--icon'>
+                            <SummarizeIcon />
+                        </div>
+                        <div className='menu-container__item--text'>
+                            Reportes    
                         </div>
                     </li>
                     <li id="settingsOption" className='menu-container__item' onClick={() => handlerMenuNavigation('settings') }>

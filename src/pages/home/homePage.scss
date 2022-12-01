@@ -1,0 +1,25 @@
+h2{
+    text-align: center;
+    padding: 50px;
+}
+.root-container-home {
+    width: 300px;
+    height: 40vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    background-color: #d1e9fc;
+    padding: 20px;
+    border-radius: 50%;
+    
+    .btn-container {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    justify-content: center;
+    }
+}

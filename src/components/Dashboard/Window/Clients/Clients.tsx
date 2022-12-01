@@ -1,14 +1,13 @@
 import { Button } from '@mui/material';
 import React from 'react'
 import DialogDashboard from '../Dialog/Dialog';
-import UseModal from '../Services/useModal';
+import UseModal from '../TouristServices/useModal';
 import AddIcon from '@mui/icons-material/Add';
 import './Clients.scss'
 import ClientTable from './ClientTable';
 import ClientForm from './ClientForm';
 
 const Clients = () => {
-    console.log('CLIENTSSSS')
     const {isOpen, toggle} = UseModal();
     return (
         <div className='client-dashboard'>

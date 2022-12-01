@@ -13,11 +13,18 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import './MainNav.scss';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../features/actions';
+import { useNavigate } from 'react-router-dom';
 
 const pages = ['Inicio', 'Ir a Tienda'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Salir'];
+
 
 const MainNav = () => {
+  const dispatch = useDispatch<any>()
+  const navigate = useNavigate()
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -34,6 +41,13 @@ const MainNav = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    console.log('hola')
+    dispatch(logout);
+    navigate('/');
+    handleCloseUserMenu();
   };
 
   return (
@@ -131,7 +145,7 @@ const MainNav = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={handleLogout}>
                   <Typography  color={'#212b36'} textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

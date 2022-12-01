@@ -3,41 +3,63 @@ import { FormikValues, useFormik } from 'formik';
 import * as React from 'react';
 import { ServiceType } from '../../../../types';
 import * as yup from 'yup'
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserFromLocalStorage } from '../../../../features/actions';
+import { ReducerState } from '../../../../features/reducers';
+import touristServices from '../../../../services/touristServices'
+import { useNavigate } from 'react-router-dom';
 
 const initialValues: ServiceType = {
   name: '',
   description: '',
-  image: '',
   price: 0,
-  discount: 0,
-  active: false,
+  active: true,
+  user: '',
 }
 
 const ServiceForm = () => {
+  const dispatch = useDispatch<any>();
+  const user = useSelector((state: ReducerState) => state.user);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+      dispatch(getUserFromLocalStorage)
+  }, [dispatch])
+
   const validationSchema = yup.object({
     name: yup
       .string()
       .required('Ingresar nombre de servicio'),
+    price: yup
+      .number(),
     description: yup
       .string()
       .required('Ingresar descripción de servicio'),
-    price: yup
-      .number()
   })
 
   const formik = useFormik({
     initialValues,
+    onSubmit: async (values) => {
+        const valuesParsed = 
+        { ...values,
+            user: user?.id,
+            active: true,
+        } as ServiceType;
+        try {
+            const response = await touristServices.createService(valuesParsed);
+            if (response.ok) {
+                navigate(0);
+            }
+        } catch (error) {
+            alert(error)
+        }
+    },
     validationSchema,
-    onSubmit: (values) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-      }, 500);
-    }
   })
   
 
   return (
-      <form>
+      <form onSubmit={formik.handleSubmit}>
           <TextField
             fullWidth
             label="Nombre"
@@ -64,18 +86,18 @@ const ServiceForm = () => {
             helperText={formik.touched.price && formik.errors.price}
           />
           <br /> <br />
-          <TextField
+          {/* <TextField
             fullWidth
             id="discount"
-            type='number'
+            type='checkbox'
             name='discount'
-            label="Descuento (en porcentaje)" 
+            label="Estado del Servicio" 
             variant="standard" 
-            value={formik.values.discount}            
+            value={formik.values.active}            
             onChange={formik.handleChange}
-            error={formik.touched.discount && Boolean(formik.errors.discount)}
-            helperText={formik.touched.discount && formik.errors.discount}
-          />
+            error={formik.touched.active && Boolean(formik.errors.active)}
+            helperText={formik.touched.active && formik.errors.active}
+          /> */}
           <br /> <br />
           <FormControl   fullWidth variant="standard">            
             <TextareaAutosize 
@@ -88,14 +110,14 @@ const ServiceForm = () => {
             />
           </FormControl>
           <br /><br />
-          <FormControl   fullWidth variant="standard">
+          {/* <FormControl   fullWidth variant="standard">
             <InputLabel htmlFor="image">Imagen</InputLabel>
             <Input
               id="image"
               type='file'
               name='image'
             />
-          </FormControl>
+          </FormControl> */}
           <br /> <br />
           <DialogActions>
             <Button type='submit'>Registrar</Button>

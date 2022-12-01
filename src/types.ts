@@ -6,6 +6,24 @@ export enum DashboardMenuOptionsType {
     PROMOS = 'promos',
 }
 
+export interface TouristGuideType {
+    name: string;
+    lastName: string;
+    phone: string;
+    dni: string;
+    user: any;
+    _id?: any;
+}
+
+export interface VehiclesType {
+    name: string;
+    lastName: string;
+    phone: string;
+    license_plate: string;
+    seats_number: number;
+    user: any;
+    _id?: any;
+}
 
 export enum BusinessCategories {
     HOTEL = 'hotel',
@@ -18,10 +36,12 @@ export interface ServiceType {
     // id: string;
     name: string;
     description: string;
-    image: string; 
+    // image: string; 
     price: number;
-    discount: number;
+    // discount: number;
     active: boolean;
+    user: any;
+    _id?: any;
 }
 
 export interface ClientType {
@@ -44,6 +64,20 @@ export interface RegisterType {
     name: string;
     password: string;
     category: BusinessCategories
+}
+
+export interface TourType {
+    capacity: number;
+    status: 'PENDING' | 'STARTED' | 'COMPLETE' | 'CANCELLED';
+    phone: string;
+    notes: string;
+    key: string;
+    client: any;
+    vehicle: any;
+    service: any;
+    touristGuide: any;
+    user: any;
+    _id?: any;
 }
 // name: string;
 // lastName: string;

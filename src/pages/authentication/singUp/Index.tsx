@@ -8,11 +8,14 @@ import Typography from '@mui/material/Typography';
 import './Index.scss';
 import SignUp from './SingUp';
 import PickCategory from './PickCategory';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import { useNavigate } from 'react-router-dom';
 const steps = ['Registro de Cuenta', 'Categoría de Negocio', 'Informate sobre tu nueva tienda virtual'];
 
 const Register = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
+  const navigate = useNavigate();
 
   const isStepOptional = (step: number) => {
     return step === 10;
@@ -101,8 +104,18 @@ const Register = () => {
                     <PickCategory handleNext={handleNext} />
                 )
             }
+            {
+                activeStep ===2&&(
+                    <div className='step3'>
+                      <h2>Solo te falta el último paso, Inicia Sesión con tus credenciales:</h2>
+                      <br />
+                      <Button variant="contained" startIcon={<VpnKeyIcon />} onClick={()=> navigate('/sign-in')}>Iniciar Sesión</Button>
+                    </div>
+                )
+            }
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
+
               color="inherit"
               disabled={activeStep === 0 || activeStep === 1}
               onClick={handleBack}
