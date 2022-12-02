@@ -36,7 +36,8 @@ const ClientForm = () => {
     .string().nullable(),
 
     phone: yup
-    .string().required('Telefono de Cliente es requerido'),
+    .string().required('Telefono de Cliente es requerido')
+    .length(9, 'El teléfono debe contener exactamente 9 digitos'),
 
     provenance: yup
     .string().nullable(),
