@@ -42,7 +42,7 @@ const TouristGuideForm = () => {
     phone: yup
         .string()
         .required('Telefono de Cliente es requerido')
-        .length(8, 'El número de teléfono debe ser exactamente de 9 dígitos'),
+        .length(9, 'El número de teléfono debe ser exactamente de 9 dígitos'),
 
   })
 
