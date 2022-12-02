@@ -4,6 +4,8 @@ import * as yup from 'yup'
 import { ClientType } from '../../../../types';
 import clientServices from '../../../../services/clients'
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { ReducerState } from '../../../../features/reducers';
 
 const initialValues: ClientType = {
     name: '',
@@ -16,6 +18,7 @@ const initialValues: ClientType = {
 
 const ClientForm = () => {
   const navigate = useNavigate()
+  const user = useSelector((state: ReducerState) => state.user)
 
   const validationSchema = yup.object({
     name: yup
@@ -45,6 +48,7 @@ const ClientForm = () => {
     onSubmit: async (values) => {
         const valuesParsed = 
         { ...values,
+          user: user?.id,
         } as ClientType;
         
         try {

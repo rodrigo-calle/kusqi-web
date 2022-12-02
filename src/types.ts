@@ -51,6 +51,7 @@ export interface ClientType {
     dni: string;
     provenance: string;
     email: string;
+    user?: string;
     _id?: string;
 }
 
