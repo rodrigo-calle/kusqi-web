@@ -23,7 +23,6 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import clientsService from '../../../../services/clients';
 import { ClientType } from '../../../../types';
-import { useNavigate } from 'react-router'
 import { useSelector } from 'react-redux';
 import { ReducerState } from '../../../../features/reducers';
 
@@ -281,7 +280,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 const ClientTable = () => {
-  const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('provenance');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
