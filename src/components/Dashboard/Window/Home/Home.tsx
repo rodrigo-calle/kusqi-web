@@ -2,6 +2,9 @@ import * as React from 'react';
 import './Home.scss';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { Paper } from '@mui/material';
+import RingVolumeIcon from '@mui/icons-material/RingVolume';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const Home = () => {
     return (
@@ -12,29 +15,29 @@ const Home = () => {
                     <Paper className='resume-boxes__item-image' elevation={6}>
                         <WhatsAppIcon />
                     </Paper>
-                    <p className='resume-boxes__quantity'>100</p>
+                    <p className='resume-boxes__quantity'>60</p>
                     <p className='resume-boxes__label'>Contacto por Chat</p>
                 </div>
                 <div className='resume-boxes__item'>
                      <Paper className='resume-boxes__item-image' elevation={6}>
-                        <WhatsAppIcon />
+                        <RingVolumeIcon />
                     </Paper>
-                    <p className='resume-boxes__quantity'>100</p>
-                    <p className='resume-boxes__label'>Contacto por Chat</p>
+                    <p className='resume-boxes__quantity'>20</p>
+                    <p className='resume-boxes__label'>Contacto por Telefónicos</p>
                 </div>
                 <div className='resume-boxes__item'>
                     <Paper className='resume-boxes__item-image' elevation={6}>
-                        <WhatsAppIcon />
+                        <ThumbUpAltIcon />
                     </Paper>
-                    <p className='resume-boxes__quantity'>100</p>
-                    <p className='resume-boxes__label'>Contacto por Chat</p>
+                    <p className='resume-boxes__quantity'>150</p>
+                    <p className='resume-boxes__label'>Interacción con Publicaciones</p>
                 </div>
                 <div className='resume-boxes__item'>
                     <Paper className='resume-boxes__item-image' elevation={6}>
-                        <WhatsAppIcon />
+                        <VisibilityIcon />
                     </Paper>
-                    <p className='resume-boxes__quantity'>100</p>
-                    <p className='resume-boxes__label'>Contacto por Chat</p>
+                    <p className='resume-boxes__quantity'>200</p>
+                    <p className='resume-boxes__label'>Visitas a tu perfil</p>
                 </div>
             </div>
         </div>

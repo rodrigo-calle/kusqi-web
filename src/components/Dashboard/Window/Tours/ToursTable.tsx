@@ -25,7 +25,7 @@ import tourServices from '../../../../services/tour';
 import { useNavigate } from 'react-router'
 import { useSelector} from 'react-redux';
 import { ReducerState } from '../../../../features/reducers';
-import { TourType } from '../../../../types';
+import { TourPopulateType} from '../../../../types';
 
 interface Data {
   capacity: number;
@@ -250,7 +250,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Lista de Guías Turísticos
+          Lista Tours
         </Typography>
       )}
       {numSelected > 0 ? (
@@ -299,26 +299,23 @@ const TourTable = () => {
  
   React.useEffect(() => {
     getTours()
-  },[])
+  },[user])
 
-  const rows = tours.map((tour: TourType) => {
+  const rows = tours.map((tour: TourPopulateType) => {
     return createData(
       tour.capacity,
       tour.status,
       tour.phone,
       tour.notes,
       tour.key,
-      tour.client,
-      tour.vehicle,
-      tour.service,
-      tour.touristGuide,
+      `${tour.client.name} ${tour.client.lastName}`,
+      `${tour.vehicle.name} ${tour.vehicle.lastName}`,
+      `${tour.service.name}`,
+      `${tour.touristGuide.name} ${tour.touristGuide.lastName}`,
       tour.user,
       tour._id ?? '',
     )
   }) 
-
-
-
 
   
   const handleRequestSort = (
@@ -479,7 +476,7 @@ const TourTable = () => {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="Compactar Tabla"
       />
     </Box>
   );

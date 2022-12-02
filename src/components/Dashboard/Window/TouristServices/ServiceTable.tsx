@@ -235,7 +235,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Lista de Vehículos
+          Lista de Servicios Turísticos
         </Typography>
       )}
       {numSelected > 0 ? (
@@ -271,28 +271,41 @@ const ServiceTable = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [services, setServices] = React.useState([])
   const user = useSelector((state: ReducerState) => state.user)
-
+  console.log(user?.id)
   const getGuides = async () => {
-    const response = await touristService.getUserServices(user?.id ?? '')
-    const data = await response.json();
-
-    if(response.ok) {
-      setServices(data)
+    if(user) {
+      const response = await touristService.getUserServices(user.id)
+      const data = await response.json();
+  
+      if(response.ok) {
+        setServices(data)
+      }
     }
+    
     return [];
   }
 
   React.useEffect(() => {
     getGuides()
-  },[])
-
+  },[user])
+  
   const rows = services.map((service: ServiceType) => {
+    if(service._id) {
+      return createData(
+        service.name,
+        service.description,
+        service.price,
+        service.active,
+        service._id,
+      )
+    }
+
     return createData(
       service.name,
       service.description,
       service.price,
       service.active,
-      service._id ?? '',
+      '',    
     )
   }) 
   
@@ -449,7 +462,7 @@ const ServiceTable = () => {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="Compactar Tabla"
       />
     </Box>
   );

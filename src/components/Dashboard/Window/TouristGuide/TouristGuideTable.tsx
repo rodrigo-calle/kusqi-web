@@ -284,7 +284,7 @@ const TouristGuideTable = () => {
 
   React.useEffect(() => {
     getGuides()
-  },[])
+  },[user])
   const rows = guides.map((guide: TouristGuideType) => {
     return createData(
       guide.name,
@@ -452,7 +452,7 @@ const TouristGuideTable = () => {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="Compactar Tabla"
       />
     </Box>
   );

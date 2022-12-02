@@ -80,6 +80,20 @@ export interface TourType {
     user: string;
     _id?: string;
 }
+
+export interface TourPopulateType {
+    capacity: number;
+    status: 'PENDING' | 'STARTED' | 'COMPLETE' | 'CANCELLED';
+    phone: string;
+    notes: string;
+    key: string;
+    client: ClientType;
+    vehicle: VehiclesType;
+    service: ServiceType;
+    touristGuide: TouristGuideType;
+    user: string;
+    _id?: string;
+}
 // name: string;
 // lastName: string;
 // phone: string[];

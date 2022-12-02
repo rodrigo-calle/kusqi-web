@@ -23,7 +23,8 @@ import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 import clientsService from '../../../../services/clients';
 import { ClientType } from '../../../../types';
-import { useNavigate } from 'react-router'
+import { useSelector } from 'react-redux';
+import { ReducerState } from '../../../../features/reducers';
 
 interface Data {
   name: string;
@@ -279,7 +280,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 const ClientTable = () => {
-  const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('provenance');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -287,20 +287,22 @@ const ClientTable = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [clients, setClients] = React.useState([])
+  const user = useSelector((state: ReducerState) => state.user)
 
   const getClients = async () => {
-    const response = await clientsService.getClients()
+   if(user){ 
+    const response = await clientsService.getUserClients(user?.id)
     const data = await response.json();
 
     if(response.ok) {
       setClients(data)
-    }
+    }}
     return [];
   }
 
   React.useEffect(() => {
     getClients()
-  },[])
+  },[user])
   console.log('SELECTED', selected)
   const rows = clients.map((client: ClientType) => {
     return createData(
@@ -369,15 +371,17 @@ const ClientTable = () => {
   };
 
   const handleDelete = ():void => {
-    selected.map((dni) => {
-      rows.map((row) => {
-        if(row.dni === dni) {
-          clientsService.deleteClient(row._id ?? '')
-        }        
-      })
-    })
+    alert('Por ahora la función eliminar y editar no se encuentran habilitadas, comunicarse con el administrador de "Kusqi" para mayor información')
 
-    navigate(0)
+    // selected.map((dni) => {
+    //   rows.map((row) => {
+    //     if(row.dni === dni) {
+    //       clientsService.deleteClient(row._id ?? '')
+    //     }        
+    //   })
+    // })
+
+    // navigate(0)
   }
   const isSelected = (dni: string) => selected.indexOf(dni) !== -1;
 
@@ -473,7 +477,7 @@ const ClientTable = () => {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="Compactar Tabla"
       />
     </Box>
   );
