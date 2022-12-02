@@ -16,6 +16,7 @@
         justify-content: space-between;
         flex-wrap: wrap;
         .resume-boxes__item {
+           margin-bottom: 35px;
            width: 205px;
            height: 238px; 
            border-radius: 9px; 
@@ -47,6 +48,7 @@
         }
         .resume-boxes__label {
             letter-spacing: 0.15em;
+            text-align: center;
         }
     }
 }

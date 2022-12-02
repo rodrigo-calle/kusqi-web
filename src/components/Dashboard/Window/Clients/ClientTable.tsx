@@ -373,15 +373,17 @@ const ClientTable = () => {
   };
 
   const handleDelete = ():void => {
-    selected.map((dni) => {
-      rows.map((row) => {
-        if(row.dni === dni) {
-          clientsService.deleteClient(row._id ?? '')
-        }        
-      })
-    })
+    alert('Por ahora la función eliminar y editar no se encuentran habilitadas, comunicarse con el administrador de "Kusqi" para mayor información')
 
-    navigate(0)
+    // selected.map((dni) => {
+    //   rows.map((row) => {
+    //     if(row.dni === dni) {
+    //       clientsService.deleteClient(row._id ?? '')
+    //     }        
+    //   })
+    // })
+
+    // navigate(0)
   }
   const isSelected = (dni: string) => selected.indexOf(dni) !== -1;
 
