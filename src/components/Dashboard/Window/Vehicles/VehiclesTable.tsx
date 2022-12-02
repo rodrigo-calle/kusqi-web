@@ -293,7 +293,7 @@ const VehiclesTable = () => {
 
   React.useEffect(() => {
     getGuides()
-  },[])
+  },[user])
 
   const rows = vehicles.map((vehicle: VehiclesType) => {
     return createData(
@@ -462,7 +462,7 @@ const VehiclesTable = () => {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="Compactar Tabla"
       />
     </Box>
   );

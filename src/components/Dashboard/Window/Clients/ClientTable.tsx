@@ -24,6 +24,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import clientsService from '../../../../services/clients';
 import { ClientType } from '../../../../types';
 import { useNavigate } from 'react-router'
+import { useSelector } from 'react-redux';
+import { ReducerState } from '../../../../features/reducers';
 
 interface Data {
   name: string;
@@ -287,20 +289,22 @@ const ClientTable = () => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [clients, setClients] = React.useState([])
+  const user = useSelector((state: ReducerState) => state.user)
 
   const getClients = async () => {
-    const response = await clientsService.getClients()
+   if(user){ 
+    const response = await clientsService.getUserClients(user?.id)
     const data = await response.json();
 
     if(response.ok) {
       setClients(data)
-    }
+    }}
     return [];
   }
 
   React.useEffect(() => {
     getClients()
-  },[])
+  },[user])
   console.log('SELECTED', selected)
   const rows = clients.map((client: ClientType) => {
     return createData(
@@ -473,7 +477,7 @@ const ClientTable = () => {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="Compactar Tabla"
       />
     </Box>
   );
