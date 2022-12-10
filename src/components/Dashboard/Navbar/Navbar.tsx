@@ -8,7 +8,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import './Navbar.scss';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -139,6 +139,14 @@ const Navbar = () => {
                         </div>
                         <div className='menu-container__item--text'>
                             Configuración    
+                        </div>
+                    </li>
+                    <li id="sellsOption" className='menu-container__item' onClick={() => handlerMenuNavigation('sells') }>
+                        <div className='menu-container__item--icon'>
+                            <PointOfSaleIcon />
+                        </div>
+                        <div className='menu-container__item--text'>
+                            Ventas    
                         </div>
                     </li>
                 {/* </Link> */}
