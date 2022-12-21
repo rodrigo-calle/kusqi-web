@@ -74,6 +74,7 @@
             flex-direction: row;
             justify-content: space-evenly;
             align-items: center;
+            margin-top: 15px;
 
             .amount-input {
               width: 35%;
@@ -87,7 +88,12 @@
               height: fit-content;
             }
           }
-
+            .add-row-container {
+                display: flex;
+                justify-content: end;
+                width: 90%;
+                // padding: 0px 10px;
+            }
         }
 
         .submit-container {
