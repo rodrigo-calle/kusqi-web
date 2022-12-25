@@ -94,6 +94,23 @@ export interface TourPopulateType {
     user: string;
     _id?: string;
 }
+
+export interface PaymentObjectType {
+    paymentType: string;
+    amount: number;
+}
+export interface TouristSellType {
+    client: string;
+    dni: string;
+    phoneOne: string;
+    phoneTwo: string;
+    tour: string;
+    user: string;
+    paymentList: Array<PaymentObjectType>;
+    date: string;
+}
+
+
 // name: string;
 // lastName: string;
 // phone: string[];
