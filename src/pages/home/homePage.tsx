@@ -4,6 +4,8 @@ import { Button } from '@mui/material';
 import { useEffect } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
+import LeftSideBar from '../../components/LeftSideBar/LeftSideBar';
+import Navbar from '../../components/Navbar/Navbar';
 import { getUserFromLocalStorage } from '../../features/actions';
 import { AppDispatch, RootState } from '../../features/hooks';
 import './homePage.scss';
@@ -22,8 +24,24 @@ const HomePage = () => {
     }
 
     return (
-        <>
-            <h2>Bienvenido a Kusqi V.0.1</h2> 
+        <div className='main-page-container'>
+            <nav>
+                <Navbar />
+            </nav>
+            <section>
+                <div className='left-container'>
+                    <LeftSideBar />
+                </div>
+                
+                <main className='posts-container'>
+
+                </main>
+                <div className=''>
+
+                </div>
+            </section>
+        
+            {/* <h2>Bienvenido a Kusqi V.0.1</h2> 
             <div className='root-container-home'>
                 <div className='btn-container'>
                     <Button variant="contained" startIcon={<VpnKeyIcon />} onClick={()=> navigate('/sign-in')}>Iniciar Sesión</Button>
@@ -31,8 +49,8 @@ const HomePage = () => {
                     <Button variant="contained" startIcon={<PersonAddAlt1Icon />} onClick={()=> navigate('/sign-up')}>Regístrate</Button>
                 </div>
                 
-            </div>
-        </>
+            </div> */}
+        </div>
         
     )
 }

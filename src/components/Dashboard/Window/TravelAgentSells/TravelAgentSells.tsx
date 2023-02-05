@@ -1,11 +1,11 @@
-import SellForm from './SellForm/SellForm';
+// import SellForm from './SellForm/SellForm';
 import SellTable from './SellTable/SellTable';
 
 const TravelAgentSells = () => {
     return (
         <div>
             <h1>Ventas</h1>
-            <SellForm />
+            {/* <SellForm /> */}
             <br />
             <SellTable />
         </div>
