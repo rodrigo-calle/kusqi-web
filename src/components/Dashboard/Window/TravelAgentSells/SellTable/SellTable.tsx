@@ -15,55 +15,47 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
+// import FilterListIcon from '@mui/icons-material/FilterList';
+import touristSellServices from '../../../../../services/touristSells';
+
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import tourServices from '../../../../services/tour';
 import { useNavigate } from 'react-router'
 import { useSelector} from 'react-redux';
-import { ReducerState } from '../../../../features/reducers';
-import { TourPopulateType} from '../../../../types';
+import { ReducerState } from '../../../../../features/reducers';
+import { TouristSellType } from '../../../../../types';
+import './SellTable.scss';
+import { TextField } from '@mui/material';
+import { Dayjs } from 'dayjs';
 
 interface Data {
-  capacity: number;
-  status: 'PENDING' | 'STARTED' | 'COMPLETE' | 'CANCELLED';
-  phone: string;
-  notes: string;
   key: string;
-  client: string;
-  vehicle: string;
   service: string;
-  touristGuide: string;
-  user: string;
+  date: Dayjs | null;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
 }
 
 function createData(
-  capacity: number,
-  status: 'PENDING' | 'STARTED' | 'COMPLETE' | 'CANCELLED',
-  phone: string,
-  notes: string,
   key: string,
-  client: string,
-  vehicle: string,
   service: string,
-  touristGuide: string,
-  user: string,
+  date: Dayjs | null,
+  quantity: number,
+  unitPrice: number,
+  subtotal: number,
   _id: string,
 ){
   return {
-    capacity,
-    status,
-    phone,
-    notes,
     key,
-    client,
-    vehicle,
     service,
-    touristGuide,
-    user,
+    date,
+    quantity,
+    unitPrice,
+    subtotal,
     _id,
   };
 }
@@ -127,36 +119,29 @@ const headCells: readonly HeadCell[] = [
     label: 'Servicio',
   },
   {
-    id: 'client',
+    id: 'date',
     numeric: false,
     disablePadding: false,
-    label: 'Cliente',
+    label: 'Fecha',
   },
   {
-    id: 'phone',
-    numeric: false,
+    id: 'quantity',
+    numeric: true,
     disablePadding: false,
-    label: 'N° Celular',
+    label: 'N° Personas',
   },
   {
-    id: 'touristGuide',
-    numeric: false,
+    id: 'unitPrice',
+    numeric: true,
     disablePadding: false,
-    label: 'Guía Turistico',
+    label: 'Precio Unitario',
   },
   {
-    id: 'vehicle',
-    numeric: false,
+    id: 'subtotal',
+    numeric: true,
     disablePadding: false,
-    label: 'Vehículo',
+    label: 'Subtotal',
   },
-  {
-    id: 'status',
-    numeric: false,
-    disablePadding: false,
-    label: 'Estado',
-  },
-  
 ];
 
 interface EnhancedTableProps {
@@ -179,7 +164,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell 
+          padding="checkbox"
+          className="table-header"
+          >
+
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -196,6 +185,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
+            className="table-header"
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -232,6 +222,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           bgcolor: (theme) =>
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
+        marginBottom: 2
       }}
     >
       {numSelected > 0 ? (
@@ -244,22 +235,29 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Lista Tours
-        </Typography>
+        <>
+          <TextField 
+              id="search"
+              type='search'
+              name='search'
+              label="Buscar..." 
+              variant="outlined" 
+              className='search-field'
+          />
+            <br />
+        </>
+            
+        // <Typography
+        //   sx={{ flex: '1 1 100%' }}
+        //   variant="h6"
+        //   id="tableTitle"
+        //   component="div"
+        // >
+        //   Lista Tours
+        // </Typography>
       )}
       {numSelected > 0 ? (
         <>
-          <Tooltip title="Editar">
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
           <Tooltip title="Eliminar">
             <IconButton onClick={() => handleDelete()}>
               <DeleteIcon />
@@ -267,53 +265,67 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           </Tooltip>
         </>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        null
+        // <Tooltip title="Filter list">
+        //   <IconButton>
+        //     <FilterListIcon />
+        //   </IconButton>
+        // </Tooltip>
       )}
     </Toolbar>
   );
 }
 
-const TourTable = () => {
+const SellTable = () => {
   const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('status');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('date');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [tours, setTours] = React.useState([])
+  const [sellTours, setSellTours] = React.useState([])
   const user = useSelector((state: ReducerState) => state.user)
-  const getTours = async () => {
-    const response = await tourServices.getUserTour(user?.id ?? '')
+  const getTourSells = async () => {
+    const response = await touristSellServices.getUserTourSell(user?.id ?? '')
     const data = await response.json();
 
     if(response.ok) {
-      setTours(data)
+      setSellTours(data)
     }
     return [];
   }
  
   React.useEffect(() => {
-    getTours()
+    getTourSells()
   },[user])
+/**
+ * 
+ * key
+service
+date
+quantity
+unitPrice
+subtotal
 
-  const rows = tours.map((tour: TourPopulateType) => {
+    key,
+    service,
+    date,
+    quantity,
+    unitPrice,
+    subtotal,
+    _id,
+ */
+  const rows = sellTours.map((sellTour: TouristSellType) => {
     return createData(
-      tour.capacity,
-      tour.status,
-      tour.phone,
-      tour.notes,
-      tour.key,
-      `${tour.client.completeName}`,
-      `${tour.vehicle.name} ${tour.vehicle.lastName}`,
-      `${tour.service.name}`,
-      `${tour.touristGuide.name} ${tour.touristGuide.lastName}`,
-      tour.user,
-      tour._id ?? '',
+      sellTour._id ?? '',
+      sellTour.tour,
+      sellTour.date,
+      sellTour.clientsNumber ?? 0,
+      0,
+      0,
+      sellTour.client,
+
     )
   }) 
 
@@ -365,9 +377,9 @@ const TourTable = () => {
     setPage(0);
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
+  // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setDense(event.target.checked);
+  // };
 
   const handleDelete = ():void => {
     selected.map((key) => {
@@ -388,98 +400,98 @@ const TourTable = () => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete} />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.sort(getComparator(order, orderBy)).slice() */}
-              {
-              // stableSort(rows, getComparator(order, orderBy))
-                rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.key);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <div className='sell-table-container'>
+        <Paper sx={{ width: '100%', mb: 2 }}>
+            <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete} />
+            <TableContainer>
+            <Table
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size={dense ? 'small' : 'medium'}
+            >
+                <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+                />
+                <TableBody>
+                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                rows.sort(getComparator(order, orderBy)).slice() */}
+                {
+                // stableSort(rows, getComparator(order, orderBy))
+                    rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                    const isItemSelected = isSelected(row.key);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
+                    return (
+                        <TableRow
+                        hover
+                        onClick={(event) => handleClick(event, row.key)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.key}
+                        selected={isItemSelected}
+                        >
+                        <TableCell padding="checkbox">
+                            <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                                'aria-labelledby': labelId,
+                            }}
+                            />
+                        </TableCell>
+                        <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            padding="none"
+                        >
+                            {row.key.slice(0,5)}
+                        </TableCell>
+                        <TableCell align="right">{row.service}</TableCell>
+                        <TableCell align="right">{row.date?.toString() ?? new Date().getTime().toString()}</TableCell>
+                        <TableCell align="right">{row.quantity}</TableCell>
+                        <TableCell align="right">{row.unitPrice}</TableCell>
+                        <TableCell align="right">{row.subtotal}</TableCell>
+                        </TableRow>
+                        
+                    );
+                    })}
+                {emptyRows > 0 && (
                     <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.key)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.key}
-                      selected={isItemSelected}
+                    style={{
+                        height: (dense ? 33 : 53) * emptyRows,
+                    }}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.key.slice(0,5)}
-                      </TableCell>
-                      <TableCell align="right">{row.service}</TableCell>
-                      <TableCell align="right">{row.client}</TableCell>
-                      <TableCell align="right">{row.phone}</TableCell>
-                      <TableCell align="right">{row.touristGuide}</TableCell>
-                      <TableCell align="right">{row.vehicle}</TableCell>
-                      <TableCell align="right">{row.status}</TableCell>
+                    <TableCell colSpan={6} />
                     </TableRow>
-                    
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Compactar Tabla"
-      />
-    </Box>
+                )}
+                </TableBody>
+            </Table>
+            </TableContainer>
+            <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+        </Paper>
+        {/* <FormControlLabel
+            control={<Switch checked={dense} onChange={handleChangeDense} />}
+            label="Compactar Tabla"
+        /> */}
+    </div>
+    
   );
 }
 
-export default TourTable;
+export default SellTable;

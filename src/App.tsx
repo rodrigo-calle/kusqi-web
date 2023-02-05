@@ -15,6 +15,7 @@ import DashboardPage from './pages/admin/Dashboard';
 import SignIn from './pages/authentication/singIn/SingIn';
 import Register from './pages/authentication/singUp/Index';
 import HomePage from './pages/home/homePage';
+import TravelAgentSells from './components/Dashboard/Window/TravelAgentSells/TravelAgentSells';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path='tourist-guide' element={<TouristGuide />} />
           <Route path='reports' element={<Report />} />
           <Route path='vehicles' element={<Vehicles />} />
+          <Route path='sells' element={<TravelAgentSells />} />
         </Route>
         <Route path='*' element={<HomePage />} />
       </Routes>    

@@ -188,7 +188,7 @@ const TouristGuideForm = () => {
           > 
           {
             clients.map((client: ClientType): ReactNode => {
-              return <MenuItem key={client._id} value={client._id}>{client.dni} - {client.name} {client.lastName}</MenuItem>
+              return <MenuItem key={client._id} value={client._id}>{client.dni} - {client.completeName}</MenuItem>
             })
           }
           </Select>

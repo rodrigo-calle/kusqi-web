@@ -25,6 +25,17 @@ const getClientById = (id: string) => {
     return fetch(`${URL_BASE}/api/clients/client/${id}`, payload)
 }
 
+const getClientByDni = (dni: string) => {
+    const payload = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+
+    return fetch(`${URL_BASE}/api/clients/client/document/${dni}`, payload)
+}
+
 const getClients = () => {
     const payload = {
         method: 'GET',
@@ -73,7 +84,8 @@ const client = {
     updateClient,
     deleteClient,
     getUserClients,
-    getClientById
+    getClientById,
+    getClientByDni
 }
 
 export default client;
