@@ -26,7 +26,7 @@ type PaymentsInputType = {
 
 type ClientRegistredType = {
     id: string | null;
-    name: string | null;
+    completeName: string | null;
     dni: string | null;
     phoneOne: string | null;
     phoneTwo: string | null;
@@ -40,19 +40,17 @@ const SellForm = () => {
         paymentType: 'CASH',
         amount: 0
     }]);
-    const [clientData, setClientData] = React.useState<ClientRegistredType | null>({
-        id: null,
-        name: null,
-        dni: null,
-        phoneOne: null,
-        phoneTwo: null,
-    })
+    const [clientData, setClientData] = React.useState<ClientRegistredType | null>(null)
 
-    const [documentClient, setDocumentClient] = React.useState<string | null>(null)
     const [clientList, setClientList] = React.useState<Array<ClientType>>([])
     const [valueDate, setValueDate] = React.useState<Dayjs | null>(
-        dayjs('2021-08-18T21:11:54'),
+        dayjs(),
     );
+        
+    React.useEffect(() => {
+        getClientsHandler()
+    }, [userId])
+
     
     const removeFields = (index: any) => {
         const data = [...newPayment]
@@ -99,19 +97,24 @@ const SellForm = () => {
         phoneOne: '',
         phoneTwo: '',
     }
- 
-    const validationSchema = yup.object({
+
+    const validationSchema = yup.object().shape({
+        dni: yup
+            .string()
+            .required('El dni es requerido')
+            .length(8, 'El documento debe ser exactamente de 8 digitos'),
         client: yup
             .string()
-            .required('El cliente es requerida'),
+            .required('El cliente es requerido'),
+        date: yup
+            .date()
+            .required('La fecha es requerida')
+            .min(today, 'La fecha mínima es hoy'),
         clientsNumber: yup
             .string()
             .required('Número de clientes es requerido'),
         tour: yup
             .string()
-            .required('Tour es requerido'),
-        date: yup
-            .date()
             .required('Tour es requerido'),
         phoneOne: yup
             .string()
@@ -131,46 +134,98 @@ const SellForm = () => {
             return []
         }
     }
-    const formik = useFormik({
-        initialValues,
-        onSubmit: async (values) => {
-            console.log({
-                ...values,
-                date: valueDate,
-                paymentList: newPayment,
-            })
-        },
-        validationSchema
-    })
-
-    console.log(clientList)
-    React.useEffect(() => {
-        getClientsHandler()
-    }, [userId])
 
     const handleOnChangeDniInput =  async(dni: string) => {
-        try {
+        try {            
             const response = await clientServices.getClientByDni(dni)
-            
+           
             if(response) {
                 const client = await response.json()
                 setClientData({
-                    id: client._id,
-                    name: `${client.name} ${client.lastName}`,
-                    dni: client.dni,
-                    phoneOne: client.phone,
-                    phoneTwo: null,
+                    id: client[0]._id,
+                    completeName: client[0].completeName,
+                    dni: client[0].dni,
+                    phoneOne: client[0].phoneOne,
+                    phoneTwo: client[0].phoneTwo,
                 })
-            }
-            setClientData(null)
-            setDocumentClient(dni)
+
+                formik.values.dni = client[0].dni
+                formik.values.client = client[0].completeName
+                formik.values.phoneOne = client[0].phoneOne
+            }        
         } catch (error) {
             setClientData(null)   
-            setDocumentClient(dni) 
         }   
     }   
 
-    console.log(documentClient)
+    const createTouristSellsMethod = async (values: ClientType, clientId: string, tour: string) => {
+        try {
+            await touristSellServices.createTouristSell({
+                ...values,
+                client: clientId,
+                dni: values.dni,
+                phoneOne: values.phoneOne,
+                phoneTwo: values.phoneTwo ?? '',
+                date: valueDate,
+                paymentList: newPayment,
+                user: userId ?? '',
+                tour,
+                clientsNumber: 0
+            }).then((response) => {
+                response.ok ? alert('Venta Registrada') : alert('No se pudo crear la venta, comunicarse con el administrador de kusqi');
+
+            }).catch((error) => {alert(error)})
+            resetCompleteForm()
+        } catch (error) {
+            console.log('No se pudo registar venta');
+        }
+    }
+    const formik = useFormik({
+        initialValues,
+        onSubmit: async (values) => {
+            const valuesParsed = values as unknown as ClientType;
+            if(!clientData) {
+                const client: ClientType = {
+                    completeName: values.client,
+                    phoneOne: values.phoneOne,
+                    phoneTwo: values.phoneTwo,
+                    dni: values.dni,
+                    provenance: '',
+                    email: '',
+                    user: userId,
+                }
+                const clientResponse = await clientServices.createClient(client)
+                const newClientParsed = await clientResponse.json();
+
+                await createTouristSellsMethod(valuesParsed, newClientParsed._id, values.tour)
+                resetCompleteForm()
+            }   
+                const client: ClientType = {
+                    completeName: clientData?.completeName ?? '',
+                    phoneOne: clientData?.phoneOne ?? '',
+                    phoneTwo: values.phoneTwo ?? '',
+                    dni: clientData?.dni ?? '',
+                    provenance: '',
+                    email: '',
+                    user: userId,
+                }
+                await createTouristSellsMethod(client, clientData?.id ?? '', values.tour)
+                resetCompleteForm()
+        },
+        validationSchema        
+    })
+
+    const resetCompleteForm = () : void => {
+        formik.values.client = '';
+        formik.values.dni = '';
+        formik.values.phoneOne = ''
+        formik.resetForm();
+        setNewPayment([])
+        setActivePaymentForm(false)
+    }
+
+
+
     return (
         <div className='sell-container-form'>
            <p className='sell-container-form__title'>Registro de Ventas</p>
@@ -178,25 +233,36 @@ const SellForm = () => {
                 <FormControl fullWidth className='first-form-control form-control'>
                 <TextField 
                     id='client'
-                    type={'text'}
+                    type='text'
                     name="client"
                     label="Cliente"
                     variant="outlined"
                     className='client-input'
+                    value={clientData?.completeName ?? formik.values.client}
                     onChange={formik.handleChange}                 
                     error={formik.touched.client && Boolean(formik.errors.client)}
-                    value={formik.values.dni}
+                    helperText={formik.touched.client && formik.errors.client}               
                 />
                 <Autocomplete 
                         aria-setsize={8}                        
                         id="client-dni"
                         freeSolo
                         disablePortal
+                        // value={formik.values.dni}
+                        // onChange={(event, value) => handleChange(value)}
                         options={clientList.map((client: ClientType) => client.dni)}
                         renderInput={(params) => 
                             <TextField 
                                 {...params} 
+                                name="dni"
+                                id='dni'
+                                type={'text'}
                                 label="DNI"
+                                onChange={formik.handleChange}   
+                                value={formik.values.dni}
+                                error={formik.touched.dni && Boolean(formik.errors.dni)}
+                                helperText={formik.touched.dni && formik.errors.dni}               
+
                             />
                         }                  
                         className='dni-input'
@@ -206,7 +272,7 @@ const SellForm = () => {
                 <FormControl fullWidth className='second-form-control form-control'>
                 <TextField 
                      id="clientsNumber"
-                     type={'number'}
+                     type='number'
                      name="clientsNumber"
                      label="Número de Clientes"
                      variant="outlined"
@@ -214,10 +280,11 @@ const SellForm = () => {
                      value={formik.values.clientsNumber}
                      onChange={formik.handleChange}
                      error={formik.touched.clientsNumber && Boolean(formik.errors.clientsNumber)}
+                     helperText={formik.touched.clientsNumber && formik.errors.clientsNumber}               
                 /> 
                     <TextField 
                         id="tour"
-                        type={'text'}
+                        type='text'
                         name="tour"
                         label="Destino (tour)"
                         variant="outlined"
@@ -225,17 +292,27 @@ const SellForm = () => {
                         value={formik.values.tour}
                         onChange={formik.handleChange}
                         error={formik.touched.tour && Boolean(formik.errors.tour)}
+                        helperText={formik.touched.tour && formik.errors.tour}               
                    /> 
                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker 
                             inputFormat='DD/MM/YYYY'
+                            minDate={dayjs()}
                             className='date-picker-input'
                             label="Fecha"
                             value={valueDate}
                             onChange={(newValue: Dayjs | null) => {
                               setValueDate(newValue);
                             }}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => 
+                                <TextField 
+                                    id='date'
+                                    name='date'
+                                    value={valueDate}
+                                    {...params} 
+                                    error={formik.touched.date && Boolean(formik.errors.date)}
+                                    helperText={formik.touched.date && formik.errors.date}   
+                                />}            
                         />
                    </LocalizationProvider>
         
@@ -248,9 +325,11 @@ const SellForm = () => {
                     label="Contacto 1"
                     variant="outlined"
                     className='phone_input'
-                    value={formik.values.phoneOne}
+                    value={clientData?.phoneOne ?? formik.values.phoneOne}
                     onChange={formik.handleChange}
                     error={formik.touched.phoneOne && Boolean(formik.errors.phoneOne)}
+                    helperText={formik.touched.phoneOne && formik.errors.phoneOne}   
+
                 /> 
                 <TextField 
                     id="phoneTwo"
@@ -262,6 +341,8 @@ const SellForm = () => {
                     value={formik.values.phoneTwo}
                     onChange={formik.handleChange}
                     error={formik.touched.phoneTwo && Boolean(formik.errors.phoneTwo)}
+                    helperText={formik.touched.phoneTwo && formik.errors.phoneTwo}   
+
                 /> 
                 {
                     activePaymentForm&&(

@@ -8,11 +8,12 @@ import { useSelector } from 'react-redux';
 import { ReducerState } from '../../../../features/reducers';
 
 const initialValues: ClientType = {
-    name: '',
-    lastName: '',
+    completeName: '',
+    // lastName: '',
     dni: '',
     email: '',
-    phone: '',
+    phoneOne: '',
+    phoneTwo: '',
     provenance: '',
 }
 
@@ -35,7 +36,7 @@ const ClientForm = () => {
     email: yup
     .string().nullable(),
 
-    phone: yup
+    phoneOne: yup
     .string().required('Telefono de Cliente es requerido')
     .length(9, 'El teléfono debe contener exactamente 9 digitos'),
 
@@ -88,13 +89,13 @@ const ClientForm = () => {
             variant="standard"
             name='name'
             id='name'
-            value={formik.values.name}
+            value={formik.values.completeName}
             onChange={formik.handleChange}
-            error={formik.touched.name && Boolean(formik.errors.name)}
-            helperText={formik.touched.name && formik.errors.name}
+            error={formik.touched.completeName && Boolean(formik.errors.completeName)}
+            helperText={formik.touched.completeName && formik.errors.completeName}
           /> 
           <br /><br />
-          <TextField
+          {/* <TextField
             fullWidth
             id="lastName"
             type='text'
@@ -105,7 +106,7 @@ const ClientForm = () => {
             onChange={formik.handleChange}
             error={formik.touched.lastName && Boolean(formik.errors.lastName)}
             helperText={formik.touched.lastName && formik.errors.lastName}
-          />
+          /> */}
           <br /> <br />
           <TextField
             fullWidth
@@ -127,10 +128,10 @@ const ClientForm = () => {
             name='phone'
             label="Teléfono" 
             variant="standard" 
-            value={formik.values.phone.toString()}            
+            value={formik.values.phoneOne.toString()}            
             onChange={formik.handleChange}
-            error={formik.touched.phone && Boolean(formik.errors.phone)}
-            helperText={formik.touched.phone && formik.errors.phone}
+            error={formik.touched.phoneOne && Boolean(formik.errors.phoneOne)}
+            helperText={formik.touched.phoneOne && formik.errors.phoneOne}
           />
           <br /><br />
           <TextField

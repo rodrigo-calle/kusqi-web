@@ -19,53 +19,43 @@ import Tooltip from '@mui/material/Tooltip';
 // import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 // import FilterListIcon from '@mui/icons-material/FilterList';
+import touristSellServices from '../../../../../services/touristSells';
+
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
-import tourServices from '../../../../../services/tour';
 import { useNavigate } from 'react-router'
 import { useSelector} from 'react-redux';
 import { ReducerState } from '../../../../../features/reducers';
-import { TourPopulateType} from '../../../../../types';
+import { TouristSellType } from '../../../../../types';
 import './SellTable.scss';
 import { TextField } from '@mui/material';
+import { Dayjs } from 'dayjs';
 
 interface Data {
-  capacity: number;
-  status: 'PENDING' | 'STARTED' | 'COMPLETE' | 'CANCELLED';
-  phone: string;
-  notes: string;
   key: string;
-  client: string;
-  vehicle: string;
   service: string;
-  touristGuide: string;
-  user: string;
+  date: Dayjs | null;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
 }
 
 function createData(
-  capacity: number,
-  status: 'PENDING' | 'STARTED' | 'COMPLETE' | 'CANCELLED',
-  phone: string,
-  notes: string,
   key: string,
-  client: string,
-  vehicle: string,
   service: string,
-  touristGuide: string,
-  user: string,
+  date: Dayjs | null,
+  quantity: number,
+  unitPrice: number,
+  subtotal: number,
   _id: string,
 ){
   return {
-    capacity,
-    status,
-    phone,
-    notes,
     key,
-    client,
-    vehicle,
     service,
-    touristGuide,
-    user,
+    date,
+    quantity,
+    unitPrice,
+    subtotal,
     _id,
   };
 }
@@ -129,34 +119,28 @@ const headCells: readonly HeadCell[] = [
     label: 'Servicio',
   },
   {
-    id: 'client',
+    id: 'date',
     numeric: false,
     disablePadding: false,
-    label: 'Cliente',
+    label: 'Fecha',
   },
   {
-    id: 'phone',
-    numeric: false,
+    id: 'quantity',
+    numeric: true,
     disablePadding: false,
-    label: 'N° Celular',
+    label: 'N° Personas',
   },
   {
-    id: 'touristGuide',
-    numeric: false,
+    id: 'unitPrice',
+    numeric: true,
     disablePadding: false,
-    label: 'Guía Turistico',
+    label: 'Precio Unitario',
   },
   {
-    id: 'vehicle',
-    numeric: false,
+    id: 'subtotal',
+    numeric: true,
     disablePadding: false,
-    label: 'Vehículo',
-  },
-  {
-    id: 'status',
-    numeric: false,
-    disablePadding: false,
-    label: 'Estado',
+    label: 'Subtotal',
   },
 ];
 
@@ -295,40 +279,53 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 const SellTable = () => {
   const navigate = useNavigate()
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('status');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('date');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [tours, setTours] = React.useState([])
+  const [sellTours, setSellTours] = React.useState([])
   const user = useSelector((state: ReducerState) => state.user)
-  const getTours = async () => {
-    const response = await tourServices.getUserTour(user?.id ?? '')
+  const getTourSells = async () => {
+    const response = await touristSellServices.getUserTourSell(user?.id ?? '')
     const data = await response.json();
 
     if(response.ok) {
-      setTours(data)
+      setSellTours(data)
     }
     return [];
   }
  
   React.useEffect(() => {
-    getTours()
+    getTourSells()
   },[user])
+/**
+ * 
+ * key
+service
+date
+quantity
+unitPrice
+subtotal
 
-  const rows = tours.map((tour: TourPopulateType) => {
+    key,
+    service,
+    date,
+    quantity,
+    unitPrice,
+    subtotal,
+    _id,
+ */
+  const rows = sellTours.map((sellTour: TouristSellType) => {
     return createData(
-      tour.capacity,
-      tour.status,
-      tour.phone,
-      tour.notes,
-      tour.key,
-      `${tour.client.name} ${tour.client.lastName}`,
-      `${tour.vehicle.name} ${tour.vehicle.lastName}`,
-      `${tour.service.name}`,
-      `${tour.touristGuide.name} ${tour.touristGuide.lastName}`,
-      tour.user,
-      tour._id ?? '',
+      sellTour._id ?? '',
+      sellTour.tour,
+      sellTour.date,
+      sellTour.clientsNumber ?? 0,
+      0,
+      0,
+      sellTour.client,
+
     )
   }) 
 
@@ -458,11 +455,10 @@ const SellTable = () => {
                             {row.key.slice(0,5)}
                         </TableCell>
                         <TableCell align="right">{row.service}</TableCell>
-                        <TableCell align="right">{row.client}</TableCell>
-                        <TableCell align="right">{row.phone}</TableCell>
-                        <TableCell align="right">{row.touristGuide}</TableCell>
-                        <TableCell align="right">{row.vehicle}</TableCell>
-                        <TableCell align="right">{row.status}</TableCell>
+                        <TableCell align="right">{row.date?.toString() ?? new Date().getTime().toString()}</TableCell>
+                        <TableCell align="right">{row.quantity}</TableCell>
+                        <TableCell align="right">{row.unitPrice}</TableCell>
+                        <TableCell align="right">{row.subtotal}</TableCell>
                         </TableRow>
                         
                     );

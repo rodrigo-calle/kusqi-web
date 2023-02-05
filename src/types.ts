@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 export enum DashboardMenuOptionsType {
     HOME = 'home',
     SERVICES = 'services',
@@ -45,9 +47,9 @@ export interface ServiceType {
 }
 
 export interface ClientType {
-    name: string;
-    lastName: string;
-    phone: string;
+    completeName: string;
+    phoneOne: string;
+    phoneTwo: string | null;
     dni: string;
     provenance: string;
     email: string;
@@ -107,10 +109,15 @@ export interface TouristSellType {
     tour: string;
     user: string;
     paymentList: Array<PaymentObjectType>;
-    date: string;
+    clientsNumber?: number;
+    date: Dayjs | null;
+    _id?: string;
 }
 
 
+// export type TouristSellPopulatedType extends TouristSellType = {
+
+// }
 // name: string;
 // lastName: string;
 // phone: string[];

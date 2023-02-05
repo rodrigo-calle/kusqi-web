@@ -27,27 +27,30 @@ import { useSelector } from 'react-redux';
 import { ReducerState } from '../../../../features/reducers';
 
 interface Data {
-  name: string;
-  lastName: string;
-  phone: string;
+  completeName: string;
+  // lastName: string;
+  phoneOne: string;
+  phoneTwo: string | null;
   dni: string;
   provenance: string;
   email: string;
 }
 
 function createData(
-    name: string,
-    lastName: string,
-    phone: string,
+    completeName: string,
+    // lastName: string,
+    phoneOne: string,
+    phoneTwo: string | null,
     dni: string,
     provenance: string,
     email: string,
     _id: string,
 ): ClientType {
   return {
-    name,
-    lastName,
-    phone,
+    completeName,
+    // lastName,
+    phoneOne,
+    phoneTwo,
     dni,
     provenance,
     email,
@@ -124,22 +127,28 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'name',
+    id: 'completeName',
     numeric: false,
     disablePadding: true,
-    label: 'Nombre(s)',
+    label: 'Nombre Completo',
   },
+  // {
+  //   id: 'lastName',
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: 'Apellidos',
+  // },
   {
-    id: 'lastName',
+    id: 'phoneOne',
     numeric: false,
     disablePadding: false,
-    label: 'Apellidos',
+    label: 'Número de Celular 1',
   },
   {
-    id: 'phone',
+    id: 'phoneTwo',
     numeric: false,
     disablePadding: false,
-    label: 'Número de Celulares',
+    label: 'Número de Celular 2',
   },
   {
     id: 'dni',
@@ -306,9 +315,10 @@ const ClientTable = () => {
   console.log('SELECTED', selected)
   const rows = clients.map((client: ClientType) => {
     return createData(
-      client.name,
-      client.lastName,
-      client.phone,
+      client.completeName,
+    //  client.lastName,
+      client.phoneOne,
+      client.phoneTwo,
       client.dni,
       client.provenance,
       client.email,
@@ -442,10 +452,11 @@ const ClientTable = () => {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.completeName}
                       </TableCell>
-                      <TableCell align="right">{row.lastName}</TableCell>
-                      <TableCell align="right">{row.phone}</TableCell>
+                      {/* <TableCell align="right">{row.lastName}</TableCell> */}
+                      <TableCell align="right">{row.phoneOne}</TableCell>
+                      <TableCell align="right">{row.phoneTwo}</TableCell>
                       <TableCell align="right">{row.dni}</TableCell>
                       <TableCell align="right">{row.provenance}</TableCell>
                       <TableCell align="right">{row.email}</TableCell>

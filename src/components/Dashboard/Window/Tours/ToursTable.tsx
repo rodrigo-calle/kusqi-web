@@ -308,7 +308,7 @@ const TourTable = () => {
       tour.phone,
       tour.notes,
       tour.key,
-      `${tour.client.name} ${tour.client.lastName}`,
+      `${tour.client.completeName}`,
       `${tour.vehicle.name} ${tour.vehicle.lastName}`,
       `${tour.service.name}`,
       `${tour.touristGuide.name} ${tour.touristGuide.lastName}`,
