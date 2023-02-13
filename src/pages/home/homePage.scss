@@ -1,3 +1,5 @@
+@import "../../breakpoints";
+
 h2{
     text-align: center;
     padding: 50px;
@@ -54,4 +56,10 @@ h2{
         height: 100vh;
     }
 
+}
+
+@media (max-width: $desktop) {
+    .posts-container {
+        width: calc(100% - 760px);
+    }
 }
