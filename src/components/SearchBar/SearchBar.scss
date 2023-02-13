@@ -1,6 +1,16 @@
+@import "../../breakpoints";
+
 .search-bar-input {
     width: 309px;
     height: 30px;
     font-weight: normal;
     font-size: 20px;
+}
+
+
+@media (max-width: $desktop) {
+    .search-bar-input {
+        width: 280px;
+    }
+    
 }

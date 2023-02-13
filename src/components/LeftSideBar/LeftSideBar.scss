@@ -1,3 +1,4 @@
+@import "../../breakpoints";
 .left-side-bar-container {
     width: 413px;
     height: 100%;
@@ -36,5 +37,11 @@
     .contact-section {
         width: 100%;
         padding: 10px 0px;
+    }
+}
+
+@media (max-width: $desktop) {
+    .left-side-bar-container {
+        width: 370px;
     }
 }

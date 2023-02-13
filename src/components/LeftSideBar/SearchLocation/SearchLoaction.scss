@@ -1,3 +1,5 @@
+@import "../../../breakpoints";
+
 .search-location-container {
     width: 373px;
     height: 109px;        
@@ -36,4 +38,14 @@
     border-radius: 7px;
  }
 
-// input-search-location
+
+ @media (max-width: $desktop) {
+    .search-location-container {
+        width: 340px;
+        height: 100px;     
+        .search-location-container__title {
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+    }
+ }

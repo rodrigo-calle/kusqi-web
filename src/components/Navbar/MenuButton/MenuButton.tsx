@@ -1,6 +1,6 @@
 import { IconProps } from '@mui/material';
 import { ReactElement } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './MenuButton.scss';
 
 type Props = {

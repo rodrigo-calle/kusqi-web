@@ -7,6 +7,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import LeftSideBar from '../../components/LeftSideBar/LeftSideBar';
 import Navbar from '../../components/Navbar/Navbar';
 import Post from '../../components/Post/Post';
+import RigthSection from '../../components/RightSide/Index';
 import { getUserFromLocalStorage } from '../../features/actions';
 import { AppDispatch, RootState } from '../../features/hooks';
 import './homePage.scss';
@@ -38,8 +39,8 @@ const HomePage = () => {
                     <Post />
                     <Post />
                 </main>
-                <div className=''>
-
+                <div className='right-container'>
+                    <RigthSection />
                 </div>
             </section>
         
