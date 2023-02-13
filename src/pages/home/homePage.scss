@@ -14,6 +14,7 @@ h2{
     background-color: #d1e9fc;
     padding: 20px;
     border-radius: 50%;
+
     
     .btn-container {
         margin: 0;
@@ -41,5 +42,11 @@ h2{
         justify-content: flex-start;
         align-items: center;
         width: 100%;
+    }
+    .posts-container {
+        width: 600px;
+        height: fit-content;
+        background-color: coral;
+        height: 100vh;
     }
 }

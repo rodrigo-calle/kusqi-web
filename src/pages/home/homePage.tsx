@@ -6,6 +6,7 @@ import { useSelector, useDispatch} from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import LeftSideBar from '../../components/LeftSideBar/LeftSideBar';
 import Navbar from '../../components/Navbar/Navbar';
+import Post from '../../components/Post/Post';
 import { getUserFromLocalStorage } from '../../features/actions';
 import { AppDispatch, RootState } from '../../features/hooks';
 import './homePage.scss';
@@ -34,7 +35,8 @@ const HomePage = () => {
                 </div>
                 
                 <main className='posts-container'>
-
+                    <Post />
+                    <Post />
                 </main>
                 <div className=''>
 
