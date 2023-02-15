@@ -35,27 +35,38 @@ h2{
     justify-content: flex-start;
     align-items: center;
     nav {
+        z-index: 100!important;
+        position: fixed;
         width: 100%;
         height: fit-content;
+        background-color: #fff;
     }
     section {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        align-items: center;
+        align-items: flex-start;
         width: 100%;
+        .left-container {
+            width: 28.62%;
+            height: 100vh;
+            position: fixed;
+            top: 81px;
+        }
+        .posts-container {
+            width: 42%;
+            height: fit-content;
+            margin: 0 auto;
+            margin-top: 92px;
+        }
+        .right-container {
+            position: fixed;
+            right: 0;
+            width: 29%;
+            top: 81px;
+            height: 100vh;
+        }
     }
-    .posts-container {
-        width: 600px;
-        height: fit-content;
-        background-color: coral;
-    }
-    .right-container {
-        width: 380px;
-        background-color: rgb(80, 103, 255);
-        height: 100vh;
-    }
-
 }
 
 @media (max-width: $desktop) {

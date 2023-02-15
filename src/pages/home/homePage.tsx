@@ -43,18 +43,7 @@ const HomePage = () => {
                     <RigthSection />
                 </div>
             </section>
-        
-            {/* <h2>Bienvenido a Kusqi V.0.1</h2> 
-            <div className='root-container-home'>
-                <div className='btn-container'>
-                    <Button variant="contained" startIcon={<VpnKeyIcon />} onClick={()=> navigate('/sign-in')}>Iniciar Sesión</Button>
-                    <p>o</p>
-                    <Button variant="contained" startIcon={<PersonAddAlt1Icon />} onClick={()=> navigate('/sign-up')}>Regístrate</Button>
-                </div>
-                
-            </div> */}
-        </div>
-        
+        </div>        
     )
 }
 

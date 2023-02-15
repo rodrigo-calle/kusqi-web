@@ -1,4 +1,3 @@
-import SearchBar from '../SearchBar/SearchBar';
 import CategoriesNav from './Categories/CategoriesNav';
 import './LeftSideBar.scss';
 import SearchLocation from './SearchLocation/SearchLoaction';
