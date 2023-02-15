@@ -3,7 +3,13 @@ import MenuButton from './MenuButton/MenuButton';
 import StoreIcon from '@mui/icons-material/Store';import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import HomeIcon from '@mui/icons-material/Home';
 import AndroidIcon from '@mui/icons-material/Android';
+import IconButton from '@mui/material/IconButton';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
+
 import './Navbar.scss';
+import AuthButton from './AuthButton/AuthButton';
 
 const Navbar = () => {
     return(
@@ -21,6 +27,13 @@ const Navbar = () => {
                 <MenuButton url='/' icon={<AndroidIcon fontSize='large' />}/>
             </div>
             <div className="authentication-section">
+                <button className='shopping-cart-button'>
+                    <IconButton size='large'>
+                        <ShoppingCartIcon fontSize='inherit' color='action'/>
+                    </IconButton>    
+                </button>
+                <AuthButton title='Registro' icon={< AddBusinessIcon/>}/>
+                <AuthButton title='Ingresar' icon={< StoreMallDirectoryIcon/>}/>
 
             </div>
 

@@ -39,17 +39,52 @@
 
     }
 
+    .authentication-section {
+            
+        .shopping-cart-button {
+            border: 2px solid #dddd;
+            background-color: #fff;
+            height: 48px;
+            width: 48px;                
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+    }
+
 }
 
 @media (max-width: $desktop) {
     .navbar-container {
         .search-section {
-            width: 370px;
+            width: 29%;
         }
 
         .buttons-sections {
-            width: calc(100% - 760px);
+            width: 42%;
+            max-width: 600px;
+        }
+        .authentication-section {
+            width: 29%;
+            
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 30px;
+            padding-left: 15px;
+            
+
+            // .shopping-cart-button {
+    
+            // }
+        
         }
 
     }
+
+
 }
