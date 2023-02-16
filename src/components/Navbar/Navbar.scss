@@ -10,7 +10,7 @@
     background-color: #fff;
     
     .search-section {
-        width: 413px;
+        width: 29%;
         height: 100%;
         border-bottom: 2px solid #fff;
         border-right: 2px solid #DDDCDC;
@@ -33,7 +33,8 @@
     }
 
     .buttons-sections {
-        width: 600px;
+        // width: 600px;
+        width: 42%;
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
@@ -42,7 +43,14 @@
     }
 
     .authentication-section {
-            
+            width: 29%;
+                
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 30px;
+            padding-left: 15px;
         .shopping-cart-button {
             border: 2px solid #dddd;
             background-color: #fff;

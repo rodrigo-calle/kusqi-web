@@ -10,6 +10,7 @@ import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 
 import './Navbar.scss';
 import AuthButton from './AuthButton/AuthButton';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     return(
@@ -32,9 +33,12 @@ const Navbar = () => {
                         <ShoppingCartIcon fontSize='inherit' color='action'/>
                     </IconButton>    
                 </button>
-                <AuthButton title='Registro' icon={< AddBusinessIcon/>}/>
-                <AuthButton title='Ingresar' icon={< StoreMallDirectoryIcon/>}/>
-
+                <Link to={'/sign-in'} className="link-style">
+                    <AuthButton title='Registro' icon={< AddBusinessIcon/>}/>
+                </Link>
+                <Link to={'/sign-up'} className="link-style">
+                    <AuthButton title='Ingresar' icon={< StoreMallDirectoryIcon/>}/>
+                </Link>
             </div>
 
         </div>

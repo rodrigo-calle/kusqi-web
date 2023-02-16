@@ -5,11 +5,6 @@ import Contact from './ContactSection/Contact';
 const LeftSideBar = () => {
     return (
         <div className="left-side-bar-container">
-            {/* <div className='header-left-side-bar-container'>
-                <div className="logo-container">
-                </div>
-                <SearchBar />
-            </div> */}
             <div className="search-location-section">
                 <SearchLocation />
             </div>

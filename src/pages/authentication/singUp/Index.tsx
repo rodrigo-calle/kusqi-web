@@ -60,7 +60,7 @@ const Register = () => {
   };
 
   return (
-    <Box sx={{ width: '65%' }} className="box-stepper"  >
+    <Box sx={{ width: '65%' }} className="box-stepper">
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
