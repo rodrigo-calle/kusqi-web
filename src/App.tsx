@@ -11,11 +11,12 @@ import Settings from './components/Dashboard/Window/Settings/Settings';
 import TouristGuide from './components/Dashboard/Window/TouristGuide/TouristGuide';
 import Tours from './components/Dashboard/Window/Tours/Tours';
 import Vehicles from './components/Dashboard/Window/Vehicles/Vehicles';
-import DashboardPage from './pages/admin/Dashboard';
 import SignIn from './pages/authentication/singIn/SingIn';
 import Register from './pages/authentication/singUp/Index';
 import HomePage from './pages/home/homePage';
 import TravelAgentSells from './components/Dashboard/Window/TravelAgentSells/TravelAgentSells';
+import DashboardPage from './pages/admin/Dashboard/Dashboard';
+import Site from './pages/admin/Site/Index';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<Register />} />
+        <Route path='/site' element={<Site />} />
         {/* <Route path='/dashboard/' element={<PrivateRoute>
             <DashboardPage />
           </PrivateRoute>
